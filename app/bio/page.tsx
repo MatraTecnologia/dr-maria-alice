@@ -1,8 +1,35 @@
+"use client"
 import { HeaderCustom } from "@/components/header-custom"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
-import Image from "next/image"
 import { GraduationCap, Award, Stethoscope, Leaf, Heart, Brain, Microscope, Zap, BookOpen } from "lucide-react"
+import { useEffect, useState } from "react"
+import InlineEditor from "@/components/InlineEditor"
+import ImageEditor from "@/components/ImageEditor"
+
+interface BioContent {
+  titulo?: string
+  subtitulo?: string
+  descricao?: string
+  experiencia?: string
+  formacao?: string
+  especialidades?: string
+  filosofia?: string
+  imagemDra?: string
+  timeline?: Array<{
+    year: string
+    title: string
+    description: string
+  }>
+  certifications?: Array<{
+    title: string
+    category: string
+  }>
+  memberships?: Array<{
+    title: string
+    description: string
+  }>
+}
 
 const timeline = [
   {
@@ -145,6 +172,73 @@ const memberships = [
 ]
 
 export default function BiografiaDra() {
+  const [content, setContent] = useState<BioContent>({})
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const loadContent = async () => {
+      try {
+        const response = await fetch('/api/paginas/bio')
+        if (response.ok) {
+          const data = await response.json()
+          setContent(data.conteudo || {})
+        }
+      } catch (error) {
+        console.error('Erro ao carregar conteúdo:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadContent()
+  }, [])
+
+  const handleSaveContent = async (fieldId: string, value: string) => {
+    try {
+      console.log('🔄 Salvando conteúdo:', { fieldId, value })
+      
+      const response = await fetch('/api/paginas/bio/content', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fieldId, value })
+      })
+
+      console.log('📡 Status da resposta:', response.status)
+
+      if (response.ok) {
+        const result = await response.json()
+        console.log('✅ Conteúdo salvo com sucesso:', result)
+        setContent(prev => ({ ...prev, [fieldId]: value }))
+      } else {
+        const errorData = await response.text()
+        console.error('❌ Erro na resposta:', errorData)
+        
+        try {
+          const errorJson = JSON.parse(errorData)
+          throw new Error(`Erro ${response.status}: ${errorJson.error || errorJson.details || 'Erro desconhecido'}`)
+        } catch {
+          throw new Error(`Erro ${response.status}: ${errorData.substring(0, 100)}`)
+        }
+      }
+    } catch (error) {
+      console.error('❌ Erro ao salvar conteúdo:', error)
+      throw error
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <HeaderCustom />
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 py-8">
+          <div className="flex items-center justify-center py-20">
+            <div className="text-gray-500">Carregando...</div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen mx-auto bg-gradient-to-br from-slate-50 to-blue-50">
       <section
@@ -165,13 +259,14 @@ export default function BiografiaDra() {
             <div className="w-full lg:w-1/3 flex justify-center lg:justify-start">
               <div className="relative">
                 <div className="absolute -inset-6 rounded-3xl blur-lg opacity-40"></div>
-                <Image
-                  src="/dra.jpg"
-                  alt="Dra. Maria Alice"
-                  height={400}
-                  width={320}
+                <ImageEditor
+                  fieldId="imagemDra"
+                  initialValue={content.imagemDra || "/dra.jpg"}
+                  onSave={handleSaveContent}
                   className="relative rounded-2xl object-cover border-4 border-white"
-                  priority
+                  alt="Dra. Maria Alice"
+                  width={320}
+                  height={400}
                 />
                 <div className="absolute -bottom-4 -right-4 bg-white rounded-full p-3 shadow-lg">
                   <Stethoscope className="w-8 h-8 text-blue-600" />
@@ -181,28 +276,55 @@ export default function BiografiaDra() {
 
             <div className="flex flex-col w-full lg:w-2/3 text-gray-700">
               <div className="mb-8">
-                <h1 className="font-bold text-4xl lg:text-5xl mb-4 text-gray-800">Dra. Maria Alice</h1>
-                <p className="text-xl text-blue-600 font-semibold mb-6">Médica Especialista em Medicina Integrativa</p>
+                <InlineEditor
+                  fieldId="titulo"
+                  initialValue={content.titulo || "Dra. Maria Alice"}
+                  onSave={(value) => handleSaveContent("titulo", value)}
+                  type="title"
+                  className="font-bold text-4xl lg:text-5xl mb-4 text-gray-800"
+                >
+                  {content.titulo || "Dra. Maria Alice"}
+                </InlineEditor>
+                
+                <InlineEditor
+                  fieldId="subtitulo"
+                  initialValue={content.subtitulo || "Médica Especialista em Medicina Integrativa"}
+                  onSave={(value) => handleSaveContent("subtitulo", value)}
+                  className="text-xl text-blue-600 font-semibold mb-6"
+                >
+                  {content.subtitulo || "Médica Especialista em Medicina Integrativa"}
+                </InlineEditor>
 
                 <div className="prose prose-lg text-gray-600 leading-relaxed space-y-4">
-                  <p>
-                    Com mais de <strong>40 anos de dedicação à medicina</strong>, a Dra. Maria Alice construiu uma
-                    trajetória única que combina a solidez da formação médica tradicional com a visão holística da
-                    medicina integrativa.
-                  </p>
+                  <InlineEditor
+                    fieldId="descricao"
+                    initialValue={content.descricao || "Com mais de 40 anos de dedicação à medicina, a Dra. Maria Alice construiu uma trajetória única que combina a solidez da formação médica tradicional com a visão holística da medicina integrativa."}
+                    onSave={(value) => handleSaveContent("descricao", value)}
+                    type="textarea"
+                    className="text-gray-600 leading-relaxed whitespace-break-spaces"
+                  >
+                    {content.descricao || "Com mais de 40 anos de dedicação à medicina, a Dra. Maria Alice construiu uma trajetória única que combina a solidez da formação médica tradicional com a visão holística da medicina integrativa."}
+                  </InlineEditor>
 
-                  <p>
-                    Formada em 1979 pela Faculdade de Medicina de Teresópolis, iniciou sua carreira como nefrologista,
-                    especializando-se no cuidado dos rins e sistema urinário. Ao longo dos anos, percebeu que o
-                    verdadeiro cuidado com a saúde vai além do tratamento de sintomas isolados.
-                  </p>
+                  <InlineEditor
+                    fieldId="experiencia"
+                    initialValue={content.experiencia || "Formada em 1979 pela Faculdade de Medicina de Teresópolis, iniciou sua carreira como nefrologista, especializando-se no cuidado dos rins e sistema urinário. Ao longo dos anos, percebeu que o verdadeiro cuidado com a saúde vai além do tratamento de sintomas isolados."}
+                    onSave={(value) => handleSaveContent("experiencia", value)}
+                    type="textarea"
+                    className="text-gray-600 leading-relaxed"
+                  >
+                    {content.experiencia || "Formada em 1979 pela Faculdade de Medicina de Teresópolis, iniciou sua carreira como nefrologista, especializando-se no cuidado dos rins e sistema urinário. Ao longo dos anos, percebeu que o verdadeiro cuidado com a saúde vai além do tratamento de sintomas isolados."}
+                  </InlineEditor>
 
-                  <p>
-                    Esta percepção a levou a explorar a <strong>medicina integrativa</strong>, onde encontrou
-                    ferramentas para tratar o paciente como um todo - corpo, mente e espírito. Hoje, atua especialmente
-                    no tratamento de doenças e desordens metabólicas, sempre com foco na prevenção e na medicina
-                    personalizada.
-                  </p>
+                  <InlineEditor
+                    fieldId="formacao"
+                    initialValue={content.formacao || "Esta percepção a levou a explorar a medicina integrativa, onde encontrou ferramentas para tratar o paciente como um todo - corpo, mente e espírito. Hoje, atua especialmente no tratamento de doenças e desordens metabólicas, sempre com foco na prevenção e na medicina personalizada."}
+                    onSave={(value) => handleSaveContent("formacao", value)}
+                    type="textarea"
+                    className="text-gray-600 leading-relaxed"
+                  >
+                    {content.formacao || "Esta percepção a levou a explorar a medicina integrativa, onde encontrou ferramentas para tratar o paciente como um todo - corpo, mente e espírito. Hoje, atua especialmente no tratamento de doenças e desordens metabólicas, sempre com foco na prevenção e na medicina personalizada."}
+                  </InlineEditor>
                 </div>
 
                 {/* Quick Stats */}
@@ -240,35 +362,64 @@ export default function BiografiaDra() {
             <div className="relative">
               <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-200 to-blue-400"></div>
 
-              {timeline.map((item, index) => (
-                <div
-                  key={index}
-                  className={`flex items-center mb-12 ${index % 2 === 0 ? "flex-row" : "flex-row-reverse"}`}
-                >
-                  <div className={`w-1/2 ${index % 2 === 0 ? "pr-8 text-right" : "pl-8 text-left"}`}>
-                    <Card className="bg-white/90 backdrop-blur-sm shadow-lg border-0 hover:shadow-xl transition-shadow duration-300">
-                      <CardContent className="p-6">
-                        <div className="flex items-center gap-3 mb-3">
-                          <div className={`w-3 h-3 rounded-full ${item.color}`}></div>
-                          <Badge variant="outline" className="font-semibold text-blue-700 border-blue-200">
-                            {item.year}
-                          </Badge>
-                        </div>
-                        <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title}</h3>
-                        <p className="text-gray-600">{item.description}</p>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  <div className="relative z-10">
-                    <div className={`w-12 h-12 rounded-full ${item.color} flex items-center justify-center shadow-lg`}>
-                      <item.icon className="w-6 h-6 text-white" />
+              {(content.timeline || timeline).map((item, index) => {
+                const originalItem = timeline[index]
+                return (
+                  <div
+                    key={index}
+                    className={`flex items-center mb-12 ${index % 2 === 0 ? "flex-row" : "flex-row-reverse"}`}
+                  >
+                    <div className={`w-1/2 ${index % 2 === 0 ? "pr-8 text-right" : "pl-8 text-left"}`}>
+                      <Card className="bg-white/90 backdrop-blur-sm shadow-lg border-0 hover:shadow-xl transition-shadow duration-300">
+                        <CardContent className="p-6">
+                          <div className="flex items-center gap-3 mb-3">
+                            <div className={`w-3 h-3 rounded-full ${originalItem.color}`}></div>
+                            <Badge variant="outline" className="font-semibold text-blue-700 border-blue-200">
+                              <InlineEditor
+                                fieldId={`timeline_${index}_year`}
+                                initialValue={item.year}
+                                onSave={(value) => handleSaveContent(`timeline_${index}_year`, value)}
+                                className="font-semibold text-blue-700"
+                              >
+                                {item.year}
+                              </InlineEditor>
+                            </Badge>
+                          </div>
+                          <h3 className="text-xl font-bold text-gray-800 mb-2">
+                            <InlineEditor
+                              fieldId={`timeline_${index}_title`}
+                              initialValue={item.title}
+                              onSave={(value) => handleSaveContent(`timeline_${index}_title`, value)}
+                              className="text-xl font-bold text-gray-800"
+                            >
+                              {item.title}
+                            </InlineEditor>
+                          </h3>
+                          <p className="text-gray-600">
+                            <InlineEditor
+                              fieldId={`timeline_${index}_description`}
+                              initialValue={item.description}
+                              onSave={(value) => handleSaveContent(`timeline_${index}_description`, value)}
+                              type="textarea"
+                              className="text-gray-600"
+                            >
+                              {item.description}
+                            </InlineEditor>
+                          </p>
+                        </CardContent>
+                      </Card>
                     </div>
-                  </div>
 
-                  <div className="w-1/2"></div>
-                </div>
-              ))}
+                    <div className="relative z-10">
+                      <div className={`w-12 h-12 rounded-full ${originalItem.color} flex items-center justify-center shadow-lg`}>
+                        <originalItem.icon className="w-6 h-6 text-white" />
+                      </div>
+                    </div>
+
+                    <div className="w-1/2"></div>
+                  </div>
+                )
+              })}
             </div>
           </div>
 
@@ -282,8 +433,9 @@ export default function BiografiaDra() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-              {certifications.map((cert, index) => {
-                const IconComponent = cert.icon
+              {(content.certifications || certifications).map((cert, index) => {
+                const originalCert = certifications[index]
+                const IconComponent = originalCert.icon
                 return (
                   <Card
                     key={index}
@@ -298,9 +450,26 @@ export default function BiografiaDra() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <Badge variant="secondary" className="mb-2 text-xs bg-blue-100 text-blue-800">
-                            {cert.category}
+                            <InlineEditor
+                              fieldId={`certifications_${index}_category`}
+                              initialValue={cert.category}
+                              onSave={(value) => handleSaveContent(`certifications_${index}_category`, value)}
+                              className="text-xs bg-blue-100 text-blue-800"
+                            >
+                              {cert.category}
+                            </InlineEditor>
                           </Badge>
-                          <p className="text-sm text-gray-700 leading-relaxed">{cert.title}</p>
+                          <p className="text-sm text-gray-700 leading-relaxed">
+                            <InlineEditor
+                              fieldId={`certifications_${index}_title`}
+                              initialValue={cert.title}
+                              onSave={(value) => handleSaveContent(`certifications_${index}_title`, value)}
+                              type="textarea"
+                              className="text-sm text-gray-700 leading-relaxed"
+                            >
+                              {cert.title}
+                            </InlineEditor>
+                          </p>
                         </div>
                       </div>
                     </CardContent>
@@ -320,8 +489,9 @@ export default function BiografiaDra() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {memberships.map((membership, index) => {
-                const IconComponent = membership.icon
+              {(content.memberships || memberships).map((membership, index) => {
+                const originalMembership = memberships[index]
+                const IconComponent = originalMembership.icon
                 return (
                   <Card
                     key={index}
@@ -331,8 +501,27 @@ export default function BiografiaDra() {
                       <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center mx-auto mb-4">
                         <IconComponent className="w-8 h-8 text-white" />
                       </div>
-                      <h3 className="text-xl font-bold text-gray-800 mb-3">{membership.title}</h3>
-                      <p className="text-gray-600">{membership.description}</p>
+                      <h3 className="text-xl font-bold text-gray-800 mb-3">
+                        <InlineEditor
+                          fieldId={`memberships_${index}_title`}
+                          initialValue={membership.title}
+                          onSave={(value) => handleSaveContent(`memberships_${index}_title`, value)}
+                          className="text-xl font-bold text-gray-800"
+                        >
+                          {membership.title}
+                        </InlineEditor>
+                      </h3>
+                      <p className="text-gray-600">
+                        <InlineEditor
+                          fieldId={`memberships_${index}_description`}
+                          initialValue={membership.description}
+                          onSave={(value) => handleSaveContent(`memberships_${index}_description`, value)}
+                          type="textarea"
+                          className="text-gray-600"
+                        >
+                          {membership.description}
+                        </InlineEditor>
+                      </p>
                     </CardContent>
                   </Card>
                 )
@@ -347,12 +536,15 @@ export default function BiografiaDra() {
                 <BookOpen className="w-16 h-16 mx-auto mb-6 opacity-80" />
                 <h2 className="text-3xl font-bold mb-6">Filosofia de Trabalho</h2>
                 <blockquote className="text-xl italic leading-relaxed max-w-4xl mx-auto">
-                  <q>
-                    Acredito que cada paciente é único e merece um tratamento personalizado que considere não apenas os
-                    sintomas, mas toda a complexidade do ser humano. A medicina integrativa me permite oferecer o melhor
-                    de ambos os mundos: a precisão da medicina tradicional aliada à sabedoria das terapias
-                    complementares.
-                  </q>
+                  <InlineEditor
+                    fieldId="filosofia"
+                    initialValue={content.filosofia || "Acredito que cada paciente é único e merece um tratamento personalizado que considere não apenas os sintomas, mas toda a complexidade do ser humano. A medicina integrativa me permite oferecer o melhor de ambos os mundos: a precisão da medicina tradicional aliada à sabedoria das terapias complementares."}
+                    onSave={(value) => handleSaveContent("filosofia", value)}
+                    type="textarea"
+                    className="text-xl italic leading-relaxed"
+                  >
+                    {content.filosofia || "Acredito que cada paciente é único e merece um tratamento personalizado que considere não apenas os sintomas, mas toda a complexidade do ser humano. A medicina integrativa me permite oferecer o melhor de ambos os mundos: a precisão da medicina tradicional aliada à sabedoria das terapias complementares."}
+                  </InlineEditor>
                 </blockquote>
                 <div className="mt-6 text-lg opacity-90">— Dra. Maria Alice</div>
               </CardContent>

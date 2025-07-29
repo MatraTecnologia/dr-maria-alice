@@ -7,6 +7,7 @@ import { Drawer, DrawerTrigger, DrawerContent, DrawerTitle } from "@/components/
 import { Menu, ChevronDown, Calendar, Phone } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
 import { useState } from "react"
+import { useUser, UserButton, SignOutButton } from "@clerk/nextjs"
 
 const tratamentosItems = [
   { href: "/emagrecimento", label: "Emagrecimento" },
@@ -31,7 +32,7 @@ export const HeaderCustom = () => {
   const pathname = usePathname()
   const [openTratamentos, setOpenTratamentos] = useState(false)
   const [openExames, setOpenExames] = useState(false)
-
+  const { isSignedIn } = useUser()
   const isActive = (href: string) => pathname === href
   const isInSection = (items: { href: string }[]) => items.some((item) => pathname === item.href)
 
@@ -63,6 +64,19 @@ export const HeaderCustom = () => {
             >
               INÍCIO
             </Link>
+
+            {
+              isSignedIn ? (
+                <Link
+                  href="/contato"
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
+                    isActive("/contato") ? "text-blue-700 bg-blue-50 shadow-sm" : "text-gray-700 hover:text-blue-700"
+                  }`}
+                >
+                  DASHBOARD
+                </Link>
+              ) : null
+            }
 
             <Link
               href="/bio"
@@ -180,6 +194,18 @@ export const HeaderCustom = () => {
 
           {/* CTA Button Desktop */}
           <div className="hidden lg:flex items-center space-x-3">
+            {
+              isSignedIn ? (
+                <>
+                  <UserButton afterSignOutUrl="/" />
+                  <SignOutButton>
+                    <Button variant="outline" size="sm" className="text-red-600 border-red-300 hover:bg-red-50">
+                      Sair
+                    </Button>
+                  </SignOutButton>                
+                </>
+              ) : null
+            }
             <Link href="tel:+5521999999999">
               <Button
                 variant="outline"

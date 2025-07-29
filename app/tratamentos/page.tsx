@@ -1,75 +1,114 @@
-import { HeaderCustom } from "@/components/header-custom";
-import Tratamento from "@/components/tratamento/page";
+"use client"
+import { HeaderCustom } from "@/components/header-custom"
+import Image from "next/image"
+import { Button } from "@/components/ui/button"
+import EditablePage from "@/components/EditablePage"
+import InlineEditor from "@/components/InlineEditor"
+import ImageEditor from "@/components/ImageEditor"
+import Link from "next/link"
+
+const tratamentos = [
+  {
+    titulo: "Emagrecimento",
+    descricao: "A Ortomolecular tem um olhar clínico sobre o emagrecimento, atuando na causa do ganho de peso e promovendo o ajuste metabólico e hormonal, além de estratégias alimentares e mudanças de hábitos.",
+    imagem: "/tratamento-emagrecimento.jpg",
+    link: "/emagrecimento"
+  },
+  {
+    titulo: "Prática Ortomolecular",
+    descricao: "A Ortomolecular é um ramo da ciência que se dedica em restabelecer o equilíbrio do organismo, através do ajuste de níveis de substâncias naturais, como vitaminas, minerais, entre outros.",
+    imagem: "/pratica-ortomolecular.jpg",
+    link: "/partica-ortomolecular"
+  },
+  {
+    titulo: "Envelhecimento Saudável",
+    descricao: "Trabalhamos com medicina preventiva e tratamentos que respeitam as particularidades de cada fase da vida, promovendo longevidade com qualidade.",
+    imagem: "/envelhecimento.png",
+    link: "/envelhecimento-saudavel"
+  },
+  {
+    titulo: "Modulação Hormonal",
+    descricao: "Modulação Hormonal Feminina e Masculina: importante para a saúde e qualidade de vida, atuando no ajuste dos níveis hormonais para favorecer bem-estar, energia e saúde em todas as fases da vida.",
+    imagem: "/modulacao.png",
+    link: "/modulacao-hormonal"
+  },
+  {
+    titulo: "Distúrbios do Sono",
+    descricao: "Identificamos as causas específicas e desenvolvemos um plano personalizado para melhorar a qualidade do sono e promover o descanso adequado.",
+    imagem: "/sono.png",
+    link: "/disturbios-do-sono"
+  },
+  {
+    titulo: "Estresse Físico e Emocional",
+    descricao: "Identificamos as causas e desenvolvemos estratégias personalizadas para gerenciar o estresse e promover o equilíbrio físico e emocional.",
+    imagem: "/estresse.png",
+    link: "/estresse-fisico-emocional"
+  }
+]
 
 export default function Tratamentos() {
-
-    const tratamentos = [
-        {
-            url: "/ortomolcular.png",
-            titulo: "PRÁTICA ORTOMOLECULAR",
-            descricao: "A Ortomolecular é um ramo da ciência com o objetivo de restabelecer o equilíbrio químico do organismo, que se dá por meio do uso de substâncias e elementos naturais, como…",
-            link: "/partica-ortomolecular"
-        },
-        {
-            url: "/tratamento-emagrecimento.jpg",
-            titulo: "EMAGRECIMENTO",
-            descricao: "A Ortomolecular é um ramo da ciência com o objetivo de restabelecer o equilíbrio químico do organismo, que se dá por meio do uso de substâncias e elementos naturais, como vitaminas, minerais ou aminoácidos…",
-            link: "/emagrecimento"
-        },
-        {
-            url: "/modulacao.png",
-            titulo: "MODULAÇÃO HORMONAL",
-            descricao: "Modulação Hormonal Feminina e Masculina: é importante para a saúde do corpo, que funciona dentro de um sistema harmônico no qual tudo está conectado, por isso ..",
-            link: "/modulacao-hormonal"
-        },
-        {
-            url: "/envelhecimento.png",
-            titulo: "ENVELHECIMENTO SAUDÁVEL",
-            descricao: "O envelhecimento é um processo que influi na queda das capacidades físicas e mentais afetando todas as pessoas, mas o retardamento desse processo e o consequente aumento do tempo médio de vida…",
-            link: "/envelhecimento-saudavel"
-        },
-        {
-            url: "/sono.png",
-            titulo: "DISTÚRBIOS DO SONO",
-            descricao: "Estar com o sono em dia torna o organismo mais forte e aumenta a imunidade  contra doenças. A dificuldade para dormir aflige muitas pessoas, o que aumenta a propensão para adoecer, uma vez que…",
-            link: "/disturbios-do-sono"
-        },
-        {
-            url: "/estresse.png",
-            titulo: "ESTRESSE FÍSICO E EMOCIONAL",
-            descricao: "O stress está ligado ao aumento dos níveis de cortisol na corrente sanguínea, afetando a mente e contribuindo para as doenças físicas, como: queda de cabelo, problemas de pele, dor de cabeça, insônia, entre …",
-            link: "/estresse-fisico-emocional"
-        }
-    ]
-    
-    return (
-        <div className="min-h-screen mx-auto ">
-            <section
-                className="flex flex-col px-4 sm:px-8 md:px-[6%] py-6 sm:py-10 relative"
-                style={{
-                    backgroundImage: 'url("/default-section-1.svg")',
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                }}
+  return (
+    <EditablePage slug="tratamentos">
+      {(content, handleSaveContent) => (
+        <div className="min-h-screen bg-[#eaf6fd]">
+          <HeaderCustom />
+          <div className="flex flex-col items-center py-10 sm:py-16 w-full max-w-7xl mx-auto px-4 sm:px-8">
+            <InlineEditor
+              fieldId="titulo"
+              initialValue={content.titulo || "Nossos Tratamentos"}
+              onSave={(value) => handleSaveContent("titulo", value)}
+              type="title"
+              className="text-[#222B45] text-2xl sm:text-3xl font-bold mb-1 text-center"
             >
-                <div className="absolute inset-0 bg-[#1a8ca811] pointer-events-none" />
-                <div className="relative z-10">
-                    <HeaderCustom />
-                    <div className="container mx-auto px-0 sm:px-4 py-8 md:py-12 text-center">
-                        <h1 className="text-3xl md:text-5xl font-bold mb-4">Tratamentos</h1>
-                        <p className="text-base md:text-lg text-slate-700">
-                            MEDICINA FUNCIONAL INTEGRATIVA – <span className="font-bold">Diagnóstico e Tratamento</span>
-                        </p>
-                    </div>
-                    <div className="flex flex-wrap gap-4 justify-start items-start p-0 sm:p-4">
-                        {tratamentos.map((tratamento) => (
-                            <Tratamento key={tratamento.titulo} url={tratamento.url} titulo={tratamento.titulo} descricao={tratamento.descricao} link={tratamento.link} />
-                        ))}
-                    </div>
+              {content.titulo || "Nossos Tratamentos"}
+            </InlineEditor>
+            
+            <InlineEditor
+              fieldId="subtitulo"
+              initialValue={content.subtitulo || "MEDICINA FUNCIONAL INTEGRATIVA – Diagnóstico e Tratamento"}
+              onSave={(value) => handleSaveContent("subtitulo", value)}
+              className="text-[10px] sm:text-[11px] text-[#8F9BB3] mb-8 sm:mb-10 mt-1 tracking-wide font-medium uppercase text-center"
+            >
+              {content.subtitulo || "MEDICINA FUNCIONAL INTEGRATIVA – Diagnóstico e Tratamento"}
+            </InlineEditor>
+            
+            <InlineEditor
+              fieldId="descricao"
+              initialValue={content.descricao || "Oferecemos tratamentos personalizados que combinam medicina tradicional e terapias complementares."}
+              onSave={(value) => handleSaveContent("descricao", value)}
+              type="textarea"
+              className="text-lg text-gray-600 max-w-2xl mx-auto mb-12 text-center"
+            >
+              {content.descricao || "Oferecemos tratamentos personalizados que combinam medicina tradicional e terapias complementares."}
+            </InlineEditor>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
+              {tratamentos.map((tratamento, index) => (
+                <div key={index} className="relative bg-white rounded-2xl rounded-l-none border border-[#000000] shadow-[0_4px_24px_0_rgba(44,51,73,0.04)] flex flex-col items-start px-4 sm:px-6 pt-6 pb-5 w-full min-h-[420px] transition-shadow hover:shadow-lg">
+                  <ImageEditor
+                    fieldId={`imagemTratamento${index}`}
+                    initialValue={content[`imagemTratamento${index}`] || tratamento.imagem}
+                    onSave={handleSaveContent}
+                    className="w-full h-44 object-cover rounded-xl mb-6"
+                    alt={tratamento.titulo}
+                    width={300}
+                    height={300}
+                  />
+                  <span className="font-bold text-[15px] text-[#222B45] mb-2 uppercase tracking-tight">
+                    {tratamento.titulo}
+                  </span>
+                  <span className="text-[13px] text-[#8F9BB3] mb-6 leading-relaxed flex-1">
+                    {tratamento.descricao}
+                  </span>
+                  <Button asChild variant="link" className="text-[#3366FF] text-xs font-semibold mt-auto hover:underline transition-colors p-0 h-auto">
+                    <Link href={tratamento.link}>Saiba Mais →</Link>
+                  </Button>
                 </div>
-            </section>
-
+              ))}
+            </div>
+          </div>
         </div>
-    )
+      )}
+    </EditablePage>
+  )
 }
