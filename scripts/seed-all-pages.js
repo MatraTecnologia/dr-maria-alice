@@ -146,6 +146,14 @@ const pagesData = {
       especialidades: 'Medicina ortomolecular, modulação hormonal, nutrigenética, fitoterapia, biopuntura.',
       consulta: 'Agende sua consulta para uma avaliação completa e personalizada.'
     }
+  },
+  'trombofilia': {
+    titulo: 'Trombofilia',
+    conteudo: {
+      titulo: 'Trombofilia',
+      descricao: 'Trombofilia é uma predisposição a trombose, que pode ser causada por fatores hereditários ou adquiridos. Pessoas que possuem trombofilia hereditária apresentam risco aumentado de ter algum quadro trombótico, geralmente antes dos 45 anos de idade. A trombofilia hereditária está relacionada com até 37% dos casos de Trombose Venosa Profunda (TVP).\n\nPessoas que possuem as mutações nos genes apresentam risco aumentado de sofrer tromboembolismo durante uma cirurgia ou o uso de algum medicamento, como anticoncepcionais.',
+      imagemTrombofilia: '/trombofilia.png'
+    }
   }
 }
 
