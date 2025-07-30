@@ -395,7 +395,7 @@ export default function BiografiaDra() {
                               {item.title}
                             </InlineEditor>
                           </h3>
-                          <p className="text-gray-600">
+                          <div className="text-gray-600">
                             <InlineEditor
                               fieldId={`timeline_${index}_description`}
                               initialValue={item.description}
@@ -405,7 +405,7 @@ export default function BiografiaDra() {
                             >
                               {item.description}
                             </InlineEditor>
-                          </p>
+                          </div>
                         </CardContent>
                       </Card>
                     </div>
@@ -459,7 +459,7 @@ export default function BiografiaDra() {
                               {cert.category}
                             </InlineEditor>
                           </Badge>
-                          <p className="text-sm text-gray-700 leading-relaxed">
+                          <div className="text-sm text-gray-700 leading-relaxed">
                             <InlineEditor
                               fieldId={`certifications_${index}_title`}
                               initialValue={cert.title}
@@ -469,7 +469,7 @@ export default function BiografiaDra() {
                             >
                               {cert.title}
                             </InlineEditor>
-                          </p>
+                          </div>
                         </div>
                       </div>
                     </CardContent>
@@ -511,7 +511,7 @@ export default function BiografiaDra() {
                           {membership.title}
                         </InlineEditor>
                       </h3>
-                      <p className="text-gray-600">
+                      <div className="text-gray-600">
                         <InlineEditor
                           fieldId={`memberships_${index}_description`}
                           initialValue={membership.description}
@@ -521,7 +521,7 @@ export default function BiografiaDra() {
                         >
                           {membership.description}
                         </InlineEditor>
-                      </p>
+                      </div>
                     </CardContent>
                   </Card>
                 )
