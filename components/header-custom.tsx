@@ -6,7 +6,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { Drawer, DrawerTrigger, DrawerContent, DrawerTitle } from "@/components/ui/drawer"
 import { Menu, ChevronDown, Calendar, Phone } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useUser, UserButton, SignOutButton } from "@clerk/nextjs"
 
 const tratamentosItems = [
@@ -32,9 +32,29 @@ export const HeaderCustom = () => {
   const pathname = usePathname()
   const [openTratamentos, setOpenTratamentos] = useState(false)
   const [openExames, setOpenExames] = useState(false)
+  const [configuracoes, setConfiguracoes] = useState({
+    telefone: '+5521999999999',
+    link_agendamento: '/contato'
+  })
   const { isSignedIn } = useUser()
   const isActive = (href: string) => pathname === href
   const isInSection = (items: { href: string }[]) => items.some((item) => pathname === item.href)
+
+  useEffect(() => {
+    const carregarConfiguracoes = async () => {
+      try {
+        const response = await fetch('/api/configuracoes')
+        if (response.ok) {
+          const data = await response.json()
+          setConfiguracoes(data)
+        }
+      } catch (error) {
+        console.error('Erro ao carregar configurações:', error)
+      }
+    }
+
+    carregarConfiguracoes()
+  }, [])
 
   return (
     <header className="w-full border-blue-100/50 bg-transparent">
@@ -67,14 +87,24 @@ export const HeaderCustom = () => {
 
             {
               isSignedIn ? (
-                <Link
-                  href="/contato"
-                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
-                    isActive("/contato") ? "text-blue-700 bg-blue-50 shadow-sm" : "text-gray-700 hover:text-blue-700"
-                  }`}
-                >
-                  DASHBOARD
-                </Link>
+                <>
+                  <Link
+                    href="/contato"
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
+                      isActive("/contato") ? "text-blue-700 bg-blue-50 shadow-sm" : "text-gray-700 hover:text-blue-700"
+                    }`}
+                  >
+                    DASHBOARD
+                  </Link>
+                  <Link
+                    href="/configuracoes"
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
+                      isActive("/configuracoes") ? "text-blue-700 bg-blue-50 shadow-sm" : "text-gray-700 hover:text-blue-700"
+                    }`}
+                  >
+                    CONFIGURAÇÕES
+                  </Link>
+                </>
               ) : null
             }
 
@@ -206,7 +236,7 @@ export const HeaderCustom = () => {
                 </>
               ) : null
             }
-            <Link href="tel:+5521999999999">
+            <Link href={`tel:${configuracoes.telefone}`}>
               <Button
                 variant="outline"
                 size="sm"
@@ -216,7 +246,7 @@ export const HeaderCustom = () => {
                 Ligar
               </Button>
             </Link>
-            <Link href="/contato">
+            <Link href={configuracoes.link_agendamento}>
               <Button className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
                 <Calendar className="w-4 h-4 mr-2" />
                 Agendar Consulta
@@ -326,11 +356,25 @@ export const HeaderCustom = () => {
                       >
                         CONTATO
                       </Link>
+                      {
+                        isSignedIn ? (
+                          <Link
+                            href="/configuracoes"
+                            className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300 ${
+                              isActive("/configuracoes")
+                                ? "text-blue-700 bg-blue-50"
+                                : "text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                            }`}
+                          >
+                            CONFIGURAÇÕES
+                          </Link>
+                        ) : null
+                      }
                     </div>
 
                     {/* Mobile CTA Buttons */}
                     <div className="pt-4 border-t border-blue-100 space-y-3">
-                      <Link href="tel:+5521999999999" className="block">
+                      <Link href={`tel:${configuracoes.telefone}`} className="block">
                         <Button
                           variant="outline"
                           className="w-full border-blue-200 text-blue-700 hover:bg-blue-50 bg-transparent"
@@ -339,7 +383,7 @@ export const HeaderCustom = () => {
                           Ligar Agora
                         </Button>
                       </Link>
-                      <Link href="/contato" className="block">
+                      <Link href={configuracoes.link_agendamento} className="block">
                         <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg">
                           <Calendar className="w-4 h-4 mr-2" />
                           Agendar Consulta

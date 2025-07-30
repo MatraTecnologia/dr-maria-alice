@@ -16,7 +16,7 @@ datasource db {
 
 model Pagina {
   id        String   @id @default(cuid())
-  slug      String   @unique       // exemplo: "bio", "tratamentos", "contato"
+  slug      String   @unique       // exemplo: "bio", "tratamentos", "contato", "configuracoes"
   titulo    String                // Título da página
   conteudo  Json                  // Conteúdo dinâmico editável
   createdAt DateTime @default(now())
