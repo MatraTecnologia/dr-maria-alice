@@ -15,7 +15,6 @@ interface InlineEditorProps {
 
 export default function InlineEditor({ 
   children, 
-  fieldId, 
   initialValue, 
   onSave, 
   type = 'text',

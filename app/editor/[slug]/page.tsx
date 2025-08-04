@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import PageEditor from '@/components/editor/pageEditor'
 import { BlocoDeConteudo } from '@/components/editor/pageEditor'
@@ -15,11 +15,7 @@ export default function EditPage() {
   } | null>(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    carregarPagina()
-  }, [slug])
-
-  const carregarPagina = async () => {
+  const carregarPagina = useCallback(async () => {
     try {
       const response = await fetch(`/api/paginas/${slug}`)
       if (response.ok) {
@@ -33,7 +29,11 @@ export default function EditPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [slug])
+
+  useEffect(() => {
+    carregarPagina()
+  }, [carregarPagina])
 
   if (loading) {
     return (

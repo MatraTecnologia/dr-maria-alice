@@ -1,6 +1,5 @@
 "use client"
 import { HeaderCustom } from "@/components/header-custom"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import EditablePage from "@/components/EditablePage"
 import InlineEditor from "@/components/InlineEditor"

@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
+interface Configuracoes {
+  [key: string]: string | number | boolean | null | undefined
+}
+
 export async function GET() {
   try {
     const configPage = await prisma.pagina.findUnique({
@@ -15,7 +19,7 @@ export async function GET() {
       })
     }
 
-    return NextResponse.json(configPage.conteudo as any)
+    return NextResponse.json(configPage.conteudo as Configuracoes)
   } catch (error) {
     console.error('Erro ao buscar configurações:', error)
     return NextResponse.json(
@@ -28,7 +32,7 @@ export async function GET() {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json()
-    const { chave, valor } = body
+    const { chave, valor }: { chave: string; valor: string | number | boolean | null | undefined } = body
 
     if (!chave || valor === undefined) {
       return NextResponse.json(
@@ -42,9 +46,9 @@ export async function PUT(request: NextRequest) {
       where: { slug: 'configuracoes' }
     })
 
-    let configuracoes = {}
+    let configuracoes: Configuracoes = {}
     if (existingConfig) {
-      configuracoes = existingConfig.conteudo as any
+      configuracoes = existingConfig.conteudo as Configuracoes
     }
 
     // Atualizar a configuração específica
