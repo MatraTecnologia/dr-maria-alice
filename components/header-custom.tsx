@@ -1,13 +1,22 @@
-"use client"
-import Image from "next/image"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
-import { Drawer, DrawerTrigger, DrawerContent, DrawerTitle } from "@/components/ui/drawer"
-import { Menu, ChevronDown, Calendar, Phone } from "lucide-react"
-import { useRouter, usePathname } from "next/navigation"
-import { useState, useEffect } from "react"
-import { useUser, UserButton, SignOutButton } from "@clerk/nextjs"
+"use client";
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
+import {
+  Drawer,
+  DrawerTrigger,
+  DrawerContent,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import { Menu, ChevronDown, Calendar, Phone } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useUser, UserButton, SignOutButton } from "@clerk/nextjs";
 
 const tratamentosItems = [
   { href: "/emagrecimento", label: "Emagrecimento" },
@@ -16,7 +25,7 @@ const tratamentosItems = [
   { href: "/modulacao-hormonal", label: "Modulação Hormonal" },
   { href: "/disturbios-do-sono", label: "Distúrbios do Sono" },
   { href: "/estresse-fisico-emocional", label: "Estresse Físico e Emocional" },
-]
+];
 
 const examesItems = [
   { href: "/dosagem-de-iodo", label: "Dosagem de Iodo" },
@@ -25,36 +34,37 @@ const examesItems = [
   { href: "/trombofilia", label: "Trombofilia" },
   { href: "/histamina", label: "Histamina – Estudo da Metilação" },
   { href: "/alzheimer", label: "Alzheimer" },
-]
+];
 
 export const HeaderCustom = () => {
-  const router = useRouter()
-  const pathname = usePathname()
-  const [openTratamentos, setOpenTratamentos] = useState(false)
-  const [openExames, setOpenExames] = useState(false)
+  const router = useRouter();
+  const pathname = usePathname();
+  const [openTratamentos, setOpenTratamentos] = useState(false);
+  const [openExames, setOpenExames] = useState(false);
   const [configuracoes, setConfiguracoes] = useState({
-    telefone: '+5521999999999',
-    link_agendamento: '/contato'
-  })
-  const { isSignedIn } = useUser()
-  const isActive = (href: string) => pathname === href
-  const isInSection = (items: { href: string }[]) => items.some((item) => pathname === item.href)
+    telefone: "+5521999999999",
+    link_agendamento: "/contato",
+  });
+  const { isSignedIn } = useUser();
+  const isActive = (href: string) => pathname === href;
+  const isInSection = (items: { href: string }[]) =>
+    items.some((item) => pathname === item.href);
 
   useEffect(() => {
     const carregarConfiguracoes = async () => {
       try {
-        const response = await fetch('/api/configuracoes')
+        const response = await fetch("/api/configuracoes");
         if (response.ok) {
-          const data = await response.json()
-          setConfiguracoes(data)
+          const data = await response.json();
+          setConfiguracoes(data);
         }
       } catch (error) {
-        console.error('Erro ao carregar configurações:', error)
+        console.error("Erro ao carregar configurações:", error);
       }
-    }
+    };
 
-    carregarConfiguracoes()
-  }, [])
+    carregarConfiguracoes();
+  }, []);
 
   return (
     <header className="w-full border-blue-100/50 bg-transparent">
@@ -79,39 +89,45 @@ export const HeaderCustom = () => {
             <Link
               href="/"
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
-                isActive("/") ? "text-blue-700 bg-blue-50 shadow-sm" : "text-gray-700 hover:text-blue-700"
+                isActive("/")
+                  ? "text-blue-700 bg-blue-50 shadow-sm"
+                  : "text-gray-700 hover:text-blue-700"
               }`}
             >
               INÍCIO
             </Link>
 
-            {
-              isSignedIn ? (
-                <>
-                  <Link
-                    href="/contato"
-                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
-                      isActive("/contato") ? "text-blue-700 bg-blue-50 shadow-sm" : "text-gray-700 hover:text-blue-700"
-                    }`}
-                  >
-                    DASHBOARD
-                  </Link>
-                  <Link
-                    href="/configuracoes"
-                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
-                      isActive("/configuracoes") ? "text-blue-700 bg-blue-50 shadow-sm" : "text-gray-700 hover:text-blue-700"
-                    }`}
-                  >
-                    CONFIGURAÇÕES
-                  </Link>
-                </>
-              ) : null
-            }
+            {isSignedIn ? (
+              <>
+                <Link
+                  href="/dashboard"
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
+                    isActive("/dashboard")
+                      ? "text-blue-700 bg-blue-50 shadow-sm"
+                      : "text-gray-700 hover:text-blue-700"
+                  }`}
+                >
+                  DASHBOARD
+                </Link>
+                <Link
+                  href="/configuracoes"
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
+                    isActive("/configuracoes")
+                      ? "text-blue-700 bg-blue-50 shadow-sm"
+                      : "text-gray-700 hover:text-blue-700"
+                  }`}
+                >
+                  CONFIGURAÇÕES
+                </Link>
+              </>
+            ) : null}
 
             <Link
               href="/bio"
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
-                isActive("/bio") ? "text-blue-700 bg-blue-50 shadow-sm" : "text-gray-700 hover:text-blue-700"
+                isActive("/bio")
+                  ? "text-blue-700 bg-blue-50 shadow-sm"
+                  : "text-gray-700 hover:text-blue-700"
               }`}
             >
               BIOGRAFIA
@@ -128,7 +144,9 @@ export const HeaderCustom = () => {
                   <Button
                     variant="ghost"
                     className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
-                      isInSection(tratamentosItems) ? "text-blue-700 bg-blue-50 shadow-sm" : "text-gray-700"
+                      isInSection(tratamentosItems)
+                        ? "text-blue-700 bg-blue-50 shadow-sm"
+                        : "text-gray-700"
                     }`}
                     onClick={() => router.push("/tratamentos")}
                   >
@@ -151,11 +169,13 @@ export const HeaderCustom = () => {
                         key={item.href}
                         variant="ghost"
                         className={`w-full justify-start text-left h-auto p-3 rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 hover:translate-x-1 ${
-                          isActive(item.href) ? "text-blue-700 bg-blue-50 shadow-sm" : "text-gray-700"
+                          isActive(item.href)
+                            ? "text-blue-700 bg-blue-50 shadow-sm"
+                            : "text-gray-700"
                         }`}
                         onClick={() => {
-                          router.push(item.href)
-                          setOpenTratamentos(false)
+                          router.push(item.href);
+                          setOpenTratamentos(false);
                         }}
                       >
                         <div className="text-sm font-medium">{item.label}</div>
@@ -177,12 +197,16 @@ export const HeaderCustom = () => {
                   <Button
                     variant="ghost"
                     className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
-                      isInSection(examesItems) ? "text-blue-700 bg-blue-50 shadow-sm" : "text-gray-700"
+                      isInSection(examesItems)
+                        ? "text-blue-700 bg-blue-50 shadow-sm"
+                        : "text-gray-700"
                     }`}
                   >
                     EXAMES ESPECIAIS
                     <ChevronDown
-                      className={`ml-1 h-4 w-4 transition-transform duration-300 ${openExames ? "rotate-180" : ""}`}
+                      className={`ml-1 h-4 w-4 transition-transform duration-300 ${
+                        openExames ? "rotate-180" : ""
+                      }`}
                     />
                   </Button>
                 </PopoverTrigger>
@@ -197,11 +221,13 @@ export const HeaderCustom = () => {
                         key={item.href}
                         variant="ghost"
                         className={`w-full justify-start text-left h-auto p-3 rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 hover:translate-x-1 ${
-                          isActive(item.href) ? "text-blue-700 bg-blue-50 shadow-sm" : "text-gray-700"
+                          isActive(item.href)
+                            ? "text-blue-700 bg-blue-50 shadow-sm"
+                            : "text-gray-700"
                         }`}
                         onClick={() => {
-                          router.push(item.href)
-                          setOpenExames(false)
+                          router.push(item.href);
+                          setOpenExames(false);
                         }}
                       >
                         <div className="text-sm font-medium">{item.label}</div>
@@ -215,7 +241,9 @@ export const HeaderCustom = () => {
             <Link
               href="/contato"
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
-                isActive("/contato") ? "text-blue-700 bg-blue-50 shadow-sm" : "text-gray-700 hover:text-blue-700"
+                isActive("/contato")
+                  ? "text-blue-700 bg-blue-50 shadow-sm"
+                  : "text-gray-700 hover:text-blue-700"
               }`}
             >
               CONTATO
@@ -224,18 +252,20 @@ export const HeaderCustom = () => {
 
           {/* CTA Button Desktop */}
           <div className="hidden lg:flex items-center space-x-3">
-            {
-              isSignedIn ? (
-                <>
-                  <UserButton afterSignOutUrl="/" />
-                  <SignOutButton>
-                    <Button variant="outline" size="sm" className="text-red-600 border-red-300 hover:bg-red-50">
-                      Sair
-                    </Button>
-                  </SignOutButton>                
-                </>
-              ) : null
-            }
+            {isSignedIn ? (
+              <>
+                <UserButton afterSignOutUrl="/" />
+                <SignOutButton>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-red-600 border-red-300 hover:bg-red-50"
+                  >
+                    Sair
+                  </Button>
+                </SignOutButton>
+              </>
+            ) : null}
             <Link href={`tel:${configuracoes.telefone}`}>
               <Button
                 variant="outline"
@@ -273,7 +303,12 @@ export const HeaderCustom = () => {
                   <div className="p-6 space-y-4">
                     {/* Mobile Logo */}
                     <div className="flex justify-center pb-4 border-b border-blue-100">
-                      <Image src="/logo.png" alt="logo" width={140} height={35} />
+                      <Image
+                        src="/logo.png"
+                        alt="logo"
+                        width={140}
+                        height={35}
+                      />
                     </div>
 
                     {/* Mobile Navigation */}
@@ -356,25 +391,26 @@ export const HeaderCustom = () => {
                       >
                         CONTATO
                       </Link>
-                      {
-                        isSignedIn ? (
-                          <Link
-                            href="/configuracoes"
-                            className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300 ${
-                              isActive("/configuracoes")
-                                ? "text-blue-700 bg-blue-50"
-                                : "text-gray-700 hover:bg-blue-50 hover:text-blue-700"
-                            }`}
-                          >
-                            CONFIGURAÇÕES
-                          </Link>
-                        ) : null
-                      }
+                      {isSignedIn ? (
+                        <Link
+                          href="/configuracoes"
+                          className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300 ${
+                            isActive("/configuracoes")
+                              ? "text-blue-700 bg-blue-50"
+                              : "text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                          }`}
+                        >
+                          CONFIGURAÇÕES
+                        </Link>
+                      ) : null}
                     </div>
 
                     {/* Mobile CTA Buttons */}
                     <div className="pt-4 border-t border-blue-100 space-y-3">
-                      <Link href={`tel:${configuracoes.telefone}`} className="block">
+                      <Link
+                        href={`tel:${configuracoes.telefone}`}
+                        className="block"
+                      >
                         <Button
                           variant="outline"
                           className="w-full border-blue-200 text-blue-700 hover:bg-blue-50 bg-transparent"
@@ -383,7 +419,10 @@ export const HeaderCustom = () => {
                           Ligar Agora
                         </Button>
                       </Link>
-                      <Link href={configuracoes.link_agendamento} className="block">
+                      <Link
+                        href={configuracoes.link_agendamento}
+                        className="block"
+                      >
                         <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg">
                           <Calendar className="w-4 h-4 mr-2" />
                           Agendar Consulta
@@ -398,5 +437,5 @@ export const HeaderCustom = () => {
         </div>
       </div>
     </header>
-  )
-}
+  );
+};
