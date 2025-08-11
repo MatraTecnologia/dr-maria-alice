@@ -3,16 +3,47 @@ import { HeaderCustom } from "@/components/header-custom";
 import { MapPin, Phone, Clock, Navigation, MessageCircle } from "lucide-react";
 import EditablePage from "@/components/EditablePage";
 import InlineEditor from "@/components/InlineEditor";
+import { useState, useEffect } from "react";
+
+interface Configuracoes {
+  telefone: string;
+  link_agendamento: string;
+  link_whatsapp: string;
+  link_mapa: string;
+  endereco_mapa: string;
+}
 
 const Contact = () => {
+  const [configuracoes, setConfiguracoes] = useState<Configuracoes>({
+    telefone: "+5521999999999",
+    link_agendamento: "/contato",
+    link_whatsapp:
+      "https://wa.me/5511993049032?text=Olá! Gostaria de agendar um atendimento.",
+    link_mapa:
+      "https://www.google.com/maps?q=R.+Voluntários+da+Pátria,+3744+-+Santana,+São+Paulo+-+SP,+02402-400&output=embed",
+    endereco_mapa:
+      "R. Voluntários da Pátria, 3744 - Santana, São Paulo - SP, 02402-400",
+  });
+
+  useEffect(() => {
+    const carregarConfiguracoes = async () => {
+      try {
+        const response = await fetch("/api/configuracoes");
+        if (response.ok) {
+          const data = await response.json();
+          setConfiguracoes(data);
+        }
+      } catch (error) {
+        console.error("Erro ao carregar configurações:", error);
+      }
+    };
+
+    carregarConfiguracoes();
+  }, []);
+
   const handleDirections = () => {
-    const address =
-      "R. Voluntários da Pátria, 3744 - Santana, São Paulo - SP, 02402-400";
-    const encodedAddress = encodeURIComponent(address);
-    window.open(
-      `https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`,
-      "_blank"
-    );
+    // const encodedAddress = encodeURIComponent(configuracoes.endereco_mapa);
+    window.open(`${configuracoes.link_mapa}`, "_blank");
   };
 
   return (
@@ -114,7 +145,7 @@ const Contact = () => {
 
                     {/* WhatsApp Button */}
                     <a
-                      href="https://wa.me/5511993049032?text=Olá! Gostaria de agendar um atendimento."
+                      href={configuracoes.link_whatsapp}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="mt-4 w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-6 rounded-xl text-lg flex items-center justify-center gap-3 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
@@ -253,7 +284,7 @@ const Contact = () => {
               <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-4 border border-white/20 col-span-1 lg:col-span-2 mt-4">
                 <div className="rounded-xl overflow-hidden h-80 lg:h-[420px] w-full">
                   <iframe
-                    src="https://www.google.com/maps?q=R.+Voluntários+da+Pátria,+3744+-+Santana,+São+Paulo+-+SP,+02402-400&output=embed"
+                    src={configuracoes.link_mapa}
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
