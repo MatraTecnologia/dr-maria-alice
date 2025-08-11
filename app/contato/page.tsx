@@ -1,209 +1,163 @@
 "use client"
 import { HeaderCustom } from "@/components/header-custom"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Checkbox } from "@/components/ui/checkbox"
-import Image from "next/image"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { toast } from "sonner"
-import { useState } from "react"
-import EditablePage from "@/components/EditablePage"
-import InlineEditor from "@/components/InlineEditor"
+import { MapPin, Phone, Clock, Navigation, MessageCircle } from "lucide-react"
 
-const contactSchema = z.object({
-    name: z.string().min(1, "Nome obrigatório"),
-    email: z.string().email("E-mail inválido"),
-    phone: z.string().min(1, "Telefone obrigatório"),
-    message: z.string().min(1, "Mensagem obrigatória"),
-    source: z.array(z.string()).optional(),
-})
-
-type ContactFormValues = z.infer<typeof contactSchema>
-
-export default function Contact() {
-    const form = useForm<ContactFormValues>({
-        resolver: zodResolver(contactSchema),
-        defaultValues: {
-            name: "",
-            email: "",
-            phone: "",
-            message: "",
-            source: [],
-        },
-    })
-    const [loading, setLoading] = useState(false)
-
-    const onSubmit = async () => {
-        setLoading(true)
-        // Simulação de envio (substituir por chamada real com TanStack Query + Axios)
-        setTimeout(() => {
-            setLoading(false)
-            toast.success("Mensagem enviada com sucesso!")
-            form.reset()
-        }, 1200)
+const Contact = () => {
+    const handleDirections = () => {
+        const address = "R. Voluntários da Pátria, 3744 - Santana, São Paulo - SP, 02402-400"
+        const encodedAddress = encodeURIComponent(address)
+        window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`, "_blank")
     }
 
     return (
-        <EditablePage slug="contato">
-            {(content, handleSaveContent) => (
-                <div className="min-h-screen mx-auto">
-                    <section
-                        className="flex flex-col px-4 sm:px-8 md:px-[6%] py-6 sm:py-10 relative"
-                        style={{
-                            backgroundImage: 'url("/default-section-1.svg")',
-                            backgroundRepeat: "no-repeat",
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                        }}
-                    >
-                        <div className="absolute inset-0 bg-[#1a8ca811] pointer-events-none" />
-                        <div className="relative z-10">
-                            <HeaderCustom />
-                            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-8 flex flex-col md:flex-row gap-6 md:gap-8 mt-6 sm:mt-10">
-                                <div className="flex-1 min-w-0">
-                                    <InlineEditor
-                                        fieldId="titulo"
-                                        initialValue={content.titulo || "Agende sua consulta"}
-                                        onSave={(value) => handleSaveContent("titulo", value)}
-                                        type="title"
-                                        className="text-3xl font-bold mb-2"
-                                    >
-                                        {content.titulo || "Agende sua consulta"}
-                                    </InlineEditor>
-                                    <InlineEditor
-                                        fieldId="descricao"
-                                        initialValue={content.descricao || "A Clínica Dra. Maria Alice Fernandes de Miranda busca através da Medicina Integrativa oferecer saúde e bem-estar aos pacientes, utilizando recursos eficazes para o diagnóstico e tratamentos."}
-                                        onSave={(value) => handleSaveContent("descricao", value)}
-                                        type="textarea"
-                                        className="text-blue-700 text-sm mb-4"
-                                    >
-                                        {content.descricao || "A Clínica Dra. Maria Alice Fernandes de Miranda busca através da Medicina Integrativa oferecer saúde e bem-estar aos pacientes, utilizando recursos eficazes para o diagnóstico e tratamentos."}
-                                    </InlineEditor>
-                                    <form className="flex flex-col gap-4" onSubmit={form.handleSubmit(onSubmit)}>
-                                        <Input
-                                            type="text"
-                                            placeholder="Nome"
-                                            {...form.register("name")}
-                                        />
-                                        <Input
-                                            type="email"
-                                            placeholder="E-mail"
-                                            {...form.register("email")}
-                                        />
-                                        <Input
-                                            type="tel"
-                                            placeholder="Telefone"
-                                            {...form.register("phone")}
-                                        />
-                                        <Textarea
-                                            placeholder="Mensagem"
-                                            {...form.register("message")}
-                                        />
-                                        <div className="flex flex-col gap-2 mt-4">
-                                            <label className="flex items-center gap-2">
-                                                <Checkbox
-                                                    value="google"
-                                                    {...form.register("source")}
-                                                />
-                                                Google
-                                            </label>
-                                            <label className="flex items-center gap-2">
-                                                <Checkbox
-                                                    value="facebook"
-                                                    {...form.register("source")}
-                                                />
-                                                Facebook
-                                            </label>
-                                            <label className="flex items-center gap-2">
-                                                <Checkbox
-                                                    value="instagram"
-                                                    {...form.register("source")}
-                                                />
-                                                Instagram
-                                            </label>
-                                            <label className="flex items-center gap-2">
-                                                <Checkbox
-                                                    value="indicacao"
-                                                    {...form.register("source")}
-                                                />
-                                                Indicação
-                                            </label>
-                                        </div>
-                                        <Button type="submit" className="mt-6" disabled={loading}>
-                                            {loading ? "Enviando..." : "Enviar"}
-                                        </Button>
-                                    </form>
-                                </div>
-                                <div className="flex-1 flex flex-col gap-4 min-w-0 mt-8 md:mt-0">
-                                    <div className="flex flex-col md:flex-row gap-6">
-                                        <div>
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <span className="text-blue-500 text-xl">📞</span>
-                                                <span className="font-semibold">Telefone</span>
-                                            </div>
-                                            <InlineEditor
-                                                fieldId="telefone"
-                                                initialValue={content.telefone || "11 4323-0042"}
-                                                onSave={(value) => handleSaveContent("telefone", value)}
-                                                className="ml-7 text-sm"
-                                            >
-                                                {content.telefone || "11 4323-0042"}
-                                            </InlineEditor>
-                                            <div className="ml-7 text-sm">11 4323-0043</div>
-                                            <div className="flex items-center gap-2 mt-2">
-                                                <span className="text-blue-500 text-xl">💬</span>
-                                                <span className="font-semibold">WhatsApp</span>
-                                            </div>
-                                            <div className="ml-7 text-sm">11 9 9304-9032</div>
-                                        </div>
-                                        <div>
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <span className="text-blue-500 text-xl">⏰</span>
-                                                <span className="font-semibold">Horário De Atendimento</span>
-                                            </div>
-                                            <InlineEditor
-                                                fieldId="horario"
-                                                initialValue={content.horario || "Segunda – Quinta 08:00 / 18:00"}
-                                                onSave={(value) => handleSaveContent("horario", value)}
-                                                className="ml-7 text-sm"
-                                            >
-                                                {content.horario || "Segunda – Quinta 08:00 / 18:00"}
-                                            </InlineEditor>
-                                            <div className="ml-7 text-sm">Sexta 08:00 / 17:00</div>
-                                            <div className="ml-7 text-sm">Sábado 08:00 / 16:00</div>
-                                        </div>
+        <div className="min-h-screen mx-auto">
+            <section
+                className="flex flex-col px-4 sm:px-8 md:px-[6%] py-6 sm:py-10 relative"
+                style={{
+                    backgroundImage: 'url("/default-section-1.svg")',
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                }}
+            >
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/80 via-white/60 to-green-50/80 pointer-events-none" />
+                <div className="relative z-10">
+                    <HeaderCustom />
+
+                    {/* Hero Section */}
+                    <div className="text-center mb-8 mt-6 sm:mt-10">
+                        <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent mb-4">
+                            Agende sua Consulta
+                        </h1>
+                        <p className="text-lg text-gray-600 max-w-2xl mx-auto">Medicina Integrativa para sua saúde e bem-estar</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        {/* Left Column - Info and Booking */}
+                        <div className="space-y-6">
+                            {/* Main Info Card */}
+                            <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-white/20">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex items-center justify-center">
+                                        <Phone className="w-6 h-6 text-white" />
                                     </div>
-                                    <div className="mt-4">
-                                        <h3 className="text-blue-500 font-bold text-lg mb-2">Leve-me até a clínica!</h3>
-                                        <div className="rounded-lg overflow-hidden mb-2">
-                                            <iframe
-                                                src="https://www.google.com/maps?q=R.+Voluntários+da+Pátria,+3744+-+Santana,+São+Paulo+-+SP,+02402-400&output=embed"
-                                                width="100%"
-                                                height="200"
-                                                style={{ border: 0 }}
-                                                allowFullScreen
-                                                loading="lazy"
-                                                referrerPolicy="no-referrer-when-downgrade"
-                                                title="Mapa da clínica"
-                                            />
-                                        </div>
-                                        <Image
-                                            src="/clinica.jpg"
-                                            alt="Foto da clínica"
-                                            width={400}
-                                            height={120}
-                                            className="rounded-lg object-cover w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-full h-auto"
-                                        />
+                                    <div>
+                                        <h2 className="text-2xl font-bold text-gray-800">Dra. Maria Alice</h2>
+                                        <p className="text-blue-600 font-medium">Medicina Integrativa</p>
                                     </div>
                                 </div>
+
+                                <p className="text-gray-600 mb-6 leading-relaxed">
+                                    A Clínica Dra. Maria Alice Fernandes de Miranda busca através da Medicina Integrativa oferecer saúde e
+                                    bem-estar aos pacientes, utilizando recursos eficazes para o diagnóstico e tratamentos.
+                                </p>
+
+                                {/* WhatsApp Button */}
+                                <a
+                                    href="https://wa.me/5511993049032?text=Olá! Gostaria de agendar um atendimento."
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-6 rounded-xl text-lg flex items-center justify-center gap-3 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                                >
+                                    <MessageCircle className="w-6 h-6" />
+                                    Agendar via WhatsApp
+                                </a>
                             </div>
+
+                            {/* Clinic Image */}
+                            {/* Remover este bloco completamente */}
                         </div>
-                    </section>
+
+                        {/* Right Column - Map and Location */}
+                        <div className="space-y-6">
+                            {/* Location Info Card */}
+                            <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
+                                        <MapPin className="w-6 h-6 text-white" />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-gray-800">Localização</h3>
+                                </div>
+
+                                <div className="space-y-3 mb-6">
+                                    <div className="flex items-start gap-3">
+                                        <MapPin className="w-5 h-5 text-blue-500 mt-1 flex-shrink-0" />
+                                        <div>
+                                            <p className="font-medium text-gray-800">Endereço</p>
+                                            <p className="text-gray-600">R. Voluntários da Pátria, 3744</p>
+                                            <p className="text-gray-600">Santana, São Paulo - SP</p>
+                                            <p className="text-gray-600">CEP: 02402-400</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-3">
+                                        <Clock className="w-5 h-5 text-green-500" />
+                                        <div>
+                                            <p className="font-medium text-gray-800">Horário de Funcionamento</p>
+                                            <p className="text-gray-600">Segunda a Sexta: 8h às 18h</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Directions Button */}
+                                <button
+                                    onClick={handleDirections}
+                                    className="w-full bg-gradient-to-r from-blue-400 to-blue-600 text-white font-bold py-4 px-6 rounded-xl text-lg flex items-center justify-center gap-3 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                                >
+                                    <Navigation className="w-6 h-6" />
+                                    Como Chegar
+                                </button>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    {/* Map */}
+                    <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-4 border border-white/20 col-span-1 lg:col-span-2 mt-4">
+                        <div className="rounded-xl overflow-hidden h-80 lg:h-[420px] w-full">
+                            <iframe
+                                src="https://www.google.com/maps?q=R.+Voluntários+da+Pátria,+3744+-+Santana,+São+Paulo+-+SP,+02402-400&output=embed"
+                                width="100%"
+                                height="100%"
+                                style={{ border: 0 }}
+                                allowFullScreen
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                                title="Mapa da clínica"
+                                className="rounded-lg w-full h-full"
+                            />
+                        </div>
+                    </div>
+                    {/* Contact Methods */}
+                    <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg p-6 text-center border border-white/20 hover:shadow-xl transition-all duration-300">
+                            <div className="w-16 h-16 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <MessageCircle className="w-8 h-8 text-white" />
+                            </div>
+                            <h4 className="font-bold text-gray-800 mb-2">WhatsApp</h4>
+                            <p className="text-gray-600 text-sm">Agendamento rápido e fácil</p>
+                        </div>
+
+                        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg p-6 text-center border border-white/20 hover:shadow-xl transition-all duration-300">
+                            <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <Phone className="w-8 h-8 text-white" />
+                            </div>
+                            <h4 className="font-bold text-gray-800 mb-2">Telefone</h4>
+                            <p className="text-gray-600 text-sm">Atendimento personalizado</p>
+                        </div>
+
+                        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg p-6 text-center border border-white/20 hover:shadow-xl transition-all duration-300">
+                            <div className="w-16 h-16 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <MapPin className="w-8 h-8 text-white" />
+                            </div>
+                            <h4 className="font-bold text-gray-800 mb-2">Presencial</h4>
+                            <p className="text-gray-600 text-sm">Visite nossa clínica</p>
+                        </div>
+                    </div>
                 </div>
-            )}
-        </EditablePage>
+            </section>
+        </div>
     )
-} 
+}
+
+export default Contact;
