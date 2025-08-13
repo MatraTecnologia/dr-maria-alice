@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-interface PageContent {
-  [key: string]: string | number | boolean | null | undefined;
-}
-
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -76,13 +72,34 @@ export async function PUT(request: NextRequest) {
       where: { slug },
     });
 
-    let conteudo: PageContent = {};
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let conteudo: any = {};
     if (existingPage) {
-      conteudo = existingPage.conteudo as PageContent;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      conteudo = existingPage.conteudo as any;
     }
 
-    // Atualizar o campo específico
-    conteudo[fieldId] = value;
+    // Verificar se é um campo de array (ex: timeline_0_year, certifications_1_title)
+    if (fieldId.includes("_")) {
+      const [arrayName, indexStr, field] = fieldId.split("_");
+      const index = parseInt(indexStr);
+
+      // Inicializar o array se não existir
+      if (!conteudo[arrayName]) {
+        conteudo[arrayName] = [];
+      }
+
+      // Garantir que o item no índice existe
+      if (!conteudo[arrayName][index]) {
+        conteudo[arrayName][index] = {};
+      }
+
+      // Atualizar o campo específico dentro do item do array
+      conteudo[arrayName][index][field] = value;
+    } else {
+      // Campo simples - atualizar diretamente
+      conteudo[fieldId] = value;
+    }
 
     // Salvar no banco
     const paginaAtualizada = await prisma.pagina.upsert({

@@ -34,6 +34,7 @@ const examesItems = [
   { href: "/trombofilia", label: "Trombofilia" },
   { href: "/histamina", label: "Histamina – Estudo da Metilação" },
   { href: "/alzheimer", label: "Alzheimer" },
+  { href: "/hormonal-salivar", label: "Hormonal Salivar" },
 ];
 
 export const HeaderCustom = () => {
