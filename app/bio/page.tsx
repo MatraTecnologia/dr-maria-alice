@@ -306,7 +306,7 @@ export default function BiografiaDra() {
                   </div>
                   <div className="text-center">
                     <div className="text-3xl font-bold text-blue-700 mb-1">
-                      14
+                      5
                     </div>
                     <div className="text-sm text-gray-600">Especializações</div>
                   </div>

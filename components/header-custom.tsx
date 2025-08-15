@@ -35,6 +35,8 @@ const examesItems = [
   { href: "/histamina", label: "Histamina – Estudo da Metilação" },
   { href: "/alzheimer", label: "Alzheimer" },
   { href: "/hormonal-salivar", label: "Hormonal Salivar" },
+  { href: "/gene-mais", label: "Gene +" },
+  { href: "/gene-x", label: "Gene X" },
 ];
 
 export const HeaderCustom = () => {
