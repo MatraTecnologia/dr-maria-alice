@@ -37,6 +37,7 @@ const examesItems = [
   { href: "/hormonal-salivar", label: "Hormonal Salivar" },
   { href: "/gene-mais", label: "Gene +" },
   { href: "/gene-x", label: "Gene X" },
+  { href: "/copromax", label: "Copromax" },
 ];
 
 export const HeaderCustom = () => {
