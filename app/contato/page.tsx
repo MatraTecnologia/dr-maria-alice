@@ -67,216 +67,288 @@ const Contact = () => {
               <div className="text-center mb-8 mt-6 sm:mt-10">
                 <InlineEditor
                   fieldId="titulo"
-                  initialValue={content.titulo || "Agende sua Consulta"}
+                  initialValue={content.titulo || "Entre em Contato"}
                   onSave={(value) => handleSaveContent("titulo", value)}
                   type="title"
                   className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent mb-4"
                 >
-                  {content.titulo || "Agende sua Consulta"}
+                  {content.titulo || "Entre em Contato"}
                 </InlineEditor>
+                <br />
 
                 <InlineEditor
                   fieldId="subtitulo"
-                  initialValue={
-                    content.subtitulo ||
-                    "Medicina Integrativa para sua saúde e bem-estar"
-                  }
+                  initialValue={content.subtitulo || "Agende sua consulta"}
                   onSave={(value) => handleSaveContent("subtitulo", value)}
                   className="text-lg text-gray-600 max-w-2xl mx-auto"
                 >
-                  {content.subtitulo ||
-                    "Medicina Integrativa para sua saúde e bem-estar"}
+                  {content.subtitulo || "Agende sua consulta"}
                 </InlineEditor>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Left Column - Info and Booking */}
-                <div className="space-y-6">
-                  {/* Main Info Card */}
-                  <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-white/20">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex items-center justify-center">
-                        <Phone className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <InlineEditor
-                          fieldId="nomeMedica"
-                          initialValue={
-                            content.nomeMedica || "Dra. Maria Alice"
-                          }
-                          onSave={(value) =>
-                            handleSaveContent("nomeMedica", value)
-                          }
-                          className="text-2xl font-bold text-gray-800"
-                        >
-                          {content.nomeMedica || "Dra. Maria Alice"}
-                        </InlineEditor>
-
-                        <InlineEditor
-                          fieldId="especialidade"
-                          initialValue={
-                            content.especialidade || "Medicina Integrativa"
-                          }
-                          onSave={(value) =>
-                            handleSaveContent("especialidade", value)
-                          }
-                          className="text-blue-600 font-medium"
-                        >
-                          {content.especialidade || "Medicina Integrativa"}
-                        </InlineEditor>
-                      </div>
+                <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex items-center justify-center">
+                      <Phone className="w-6 h-6 text-white" />
                     </div>
+                    <div>
+                      <InlineEditor
+                        fieldId="nomeMedica"
+                        initialValue={content.nomeMedica || "Dra. Maria Alice"}
+                        onSave={(value) =>
+                          handleSaveContent("nomeMedica", value)
+                        }
+                        className="text-xl font-bold text-gray-800"
+                      >
+                        {content.nomeMedica || "Dra. Maria Alice"}
+                      </InlineEditor>
+                      <br />
+                      <InlineEditor
+                        fieldId="especialidade"
+                        initialValue={
+                          content.especialidade || "Medicina Integrativa"
+                        }
+                        onSave={(value) =>
+                          handleSaveContent("especialidade", value)
+                        }
+                        className="text-blue-600 font-medium text-sm"
+                      >
+                        {content.especialidade || "Medicina Integrativa"}
+                      </InlineEditor>
+                    </div>
+                  </div>
 
+                  <InlineEditor
+                    fieldId="descricaoClinica"
+                    initialValue={
+                      content.descricaoClinica ||
+                      "A Clínica Dra. Maria Alice Fernandes de Miranda busca através da Medicina Integrativa oferecer saúde e bem-estar aos pacientes, utilizando recursos eficazes para o diagnóstico e tratamentos."
+                    }
+                    onSave={(value) =>
+                      handleSaveContent("descricaoClinica", value)
+                    }
+                    type="textarea"
+                    className="text-gray-600 mb-6 leading-relaxed text-sm"
+                  >
+                    {content.descricaoClinica ||
+                      "A Clínica Dra. Maria Alice Fernandes de Miranda busca através da Medicina Integrativa oferecer saúde e bem-estar aos pacientes, utilizando recursos eficazes para o diagnóstico e tratamentos."}
+                  </InlineEditor>
+
+                  {/* WhatsApp Button */}
+                  <a
+                    href={configuracoes.link_whatsapp}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-6 w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-4 rounded-xl text-base flex items-center justify-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    Agendar via WhatsApp
+                  </a>
+                </div>
+
+                {/* Middle Column - Email CTA */}
+                <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20">
+                  <div className="flex flex-col items-center text-center mb-6">
+                    <div className="w-16 h-16 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full flex items-center justify-center mb-4">
+                      <svg
+                        className="w-8 h-8 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                        />
+                      </svg>
+                    </div>
                     <InlineEditor
-                      fieldId="descricaoClinica"
+                      fieldId="tituloEmailCTA"
                       initialValue={
-                        content.descricaoClinica ||
-                        "A Clínica Dra. Maria Alice Fernandes de Miranda busca através da Medicina Integrativa oferecer saúde e bem-estar aos pacientes, utilizando recursos eficazes para o diagnóstico e tratamentos."
+                        content.tituloEmailCTA || "Precisa de mais informações?"
                       }
                       onSave={(value) =>
-                        handleSaveContent("descricaoClinica", value)
+                        handleSaveContent("tituloEmailCTA", value)
                       }
-                      type="textarea"
-                      className="text-gray-600 mb-6 leading-relaxed"
+                      className="text-xl font-bold text-gray-800 mb-2"
                     >
-                      {content.descricaoClinica ||
-                        "A Clínica Dra. Maria Alice Fernandes de Miranda busca através da Medicina Integrativa oferecer saúde e bem-estar aos pacientes, utilizando recursos eficazes para o diagnóstico e tratamentos."}
+                      {content.tituloEmailCTA || "Precisa de mais informações?"}
                     </InlineEditor>
-
-                    {/* WhatsApp Button */}
-                    <a
-                      href={configuracoes.link_whatsapp}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-4 w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-6 rounded-xl text-lg flex items-center justify-center gap-3 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                    <InlineEditor
+                      fieldId="subtituloEmailCTA"
+                      initialValue={
+                        content.subtituloEmailCTA ||
+                        "Entre em contato por email"
+                      }
+                      onSave={(value) =>
+                        handleSaveContent("subtituloEmailCTA", value)
+                      }
+                      className="text-gray-600 text-sm mb-4"
                     >
-                      <MessageCircle className="w-6 h-6" />
-                      Agendar via WhatsApp
+                      {content.subtituloEmailCTA ||
+                        "Entre em contato por email"}
+                    </InlineEditor>
+                  </div>
+
+                  <div className="text-center">
+                    <p className="mt-3 text-gray-600 text-sm">
+                      <InlineEditor
+                        fieldId="emailEndereco"
+                        initialValue={
+                          content.emailEndereco ||
+                          "dramarialicerecepcao@gmail.com"
+                        }
+                        onSave={(value) =>
+                          handleSaveContent("emailEndereco", value)
+                        }
+                        className="text-gray-600 text-sm"
+                      >
+                        {content.emailEndereco ||
+                          "dramarialicerecepcao@gmail.com"}
+                      </InlineEditor>
+                    </p>
+                    <a
+                      href="mailto:dramarialicerecepcao@gmail.com"
+                      className="mt-4 inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl text-base transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                    >
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                        />
+                      </svg>
+                      Enviar Email
                     </a>
                   </div>
                 </div>
 
                 {/* Right Column - Map and Location */}
-                <div className="space-y-6">
-                  {/* Location Info Card */}
-                  <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
-                        <MapPin className="w-6 h-6 text-white" />
-                      </div>
-                      <InlineEditor
-                        fieldId="tituloLocalizacao"
-                        initialValue={
-                          content.tituloLocalizacao || "Localização"
-                        }
-                        onSave={(value) =>
-                          handleSaveContent("tituloLocalizacao", value)
-                        }
-                        className="text-xl font-bold text-gray-800"
-                      >
-                        {content.tituloLocalizacao || "Localização"}
-                      </InlineEditor>
+                <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-white/20">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-12 h-12 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
+                      <MapPin className="w-6 h-6 text-white" />
                     </div>
-
-                    <div className="space-y-3 mb-6">
-                      <div className="flex items-start gap-3">
-                        <MapPin className="w-5 h-5 text-blue-500 mt-1 flex-shrink-0" />
-                        <div>
-                          <InlineEditor
-                            fieldId="labelEndereco"
-                            initialValue={content.labelEndereco || "Endereço"}
-                            onSave={(value) =>
-                              handleSaveContent("labelEndereco", value)
-                            }
-                            className="font-medium text-gray-800"
-                          >
-                            {content.labelEndereco || "Endereço"}
-                          </InlineEditor>
-
-                          <InlineEditor
-                            fieldId="enderecoLinha1"
-                            initialValue={
-                              content.enderecoLinha1 ||
-                              "R. Voluntários da Pátria, 3744"
-                            }
-                            onSave={(value) =>
-                              handleSaveContent("enderecoLinha1", value)
-                            }
-                            className="text-gray-600"
-                          >
-                            {content.enderecoLinha1 ||
-                              "R. Voluntários da Pátria, 3744"}
-                          </InlineEditor>
-
-                          <InlineEditor
-                            fieldId="enderecoLinha2"
-                            initialValue={
-                              content.enderecoLinha2 ||
-                              "Santana, São Paulo - SP"
-                            }
-                            onSave={(value) =>
-                              handleSaveContent("enderecoLinha2", value)
-                            }
-                            className="text-gray-600"
-                          >
-                            {content.enderecoLinha2 ||
-                              "Santana, São Paulo - SP"}
-                          </InlineEditor>
-
-                          <InlineEditor
-                            fieldId="cep"
-                            initialValue={content.cep || "CEP: 02402-400"}
-                            onSave={(value) => handleSaveContent("cep", value)}
-                            className="text-gray-600"
-                          >
-                            {content.cep || "CEP: 02402-400"}
-                          </InlineEditor>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-3">
-                        <Clock className="w-5 h-5 text-green-500" />
-                        <div>
-                          <InlineEditor
-                            fieldId="labelHorario"
-                            initialValue={
-                              content.labelHorario || "Horário de Funcionamento"
-                            }
-                            onSave={(value) =>
-                              handleSaveContent("labelHorario", value)
-                            }
-                            className="font-medium text-gray-800"
-                          >
-                            {content.labelHorario || "Horário de Funcionamento"}
-                          </InlineEditor>
-
-                          <InlineEditor
-                            fieldId="horarioFuncionamento"
-                            initialValue={
-                              content.horarioFuncionamento ||
-                              "Segunda a Sexta: 8h às 18h"
-                            }
-                            onSave={(value) =>
-                              handleSaveContent("horarioFuncionamento", value)
-                            }
-                            className="text-gray-600"
-                          >
-                            {content.horarioFuncionamento ||
-                              "Segunda a Sexta: 8h às 18h"}
-                          </InlineEditor>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Directions Button */}
-                    <button
-                      onClick={handleDirections}
-                      className="w-full bg-gradient-to-r from-blue-400 to-blue-600 text-white font-bold py-4 px-6 rounded-xl text-lg flex items-center justify-center gap-3 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                    <InlineEditor
+                      fieldId="tituloLocalizacao"
+                      initialValue={content.tituloLocalizacao || "Localização"}
+                      onSave={(value) =>
+                        handleSaveContent("tituloLocalizacao", value)
+                      }
+                      className="text-xl font-bold text-gray-800"
                     >
-                      <Navigation className="w-6 h-6" />
-                      Como Chegar
-                    </button>
+                      {content.tituloLocalizacao || "Localização"}
+                    </InlineEditor>
                   </div>
+
+                  <div className="space-y-4 mb-6">
+                    <div className="flex items-start gap-3">
+                      <MapPin className="w-5 h-5 text-blue-500 mt-1 flex-shrink-0" />
+                      <div className="space-y-1">
+                        <InlineEditor
+                          fieldId="labelEndereco"
+                          initialValue={content.labelEndereco || "Endereço"}
+                          onSave={(value) =>
+                            handleSaveContent("labelEndereco", value)
+                          }
+                          className="font-medium text-gray-800 text-sm"
+                        >
+                          {content.labelEndereco || "Endereço"}
+                        </InlineEditor>
+                        <br />
+                        <InlineEditor
+                          fieldId="enderecoLinha1"
+                          initialValue={
+                            content.enderecoLinha1 ||
+                            "R. Voluntários da Pátria, 3744"
+                          }
+                          onSave={(value) =>
+                            handleSaveContent("enderecoLinha1", value)
+                          }
+                          className="text-gray-600 text-sm"
+                        >
+                          {content.enderecoLinha1 ||
+                            "R. Voluntários da Pátria, 3744"}
+                        </InlineEditor>
+                        <br />
+                        <InlineEditor
+                          fieldId="enderecoLinha2"
+                          initialValue={
+                            content.enderecoLinha2 || "Santana, São Paulo - SP"
+                          }
+                          onSave={(value) =>
+                            handleSaveContent("enderecoLinha2", value)
+                          }
+                          className="text-gray-600 text-sm"
+                        >
+                          {content.enderecoLinha2 || "Santana, São Paulo - SP"}
+                        </InlineEditor>
+                        <br />
+                        <InlineEditor
+                          fieldId="cep"
+                          initialValue={content.cep || "CEP: 02402-400"}
+                          onSave={(value) => handleSaveContent("cep", value)}
+                          className="text-gray-600 text-sm"
+                        >
+                          {content.cep || "CEP: 02402-400"}
+                        </InlineEditor>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <Clock className="w-5 h-5 text-green-500" />
+                      <div className="space-y-1">
+                        <InlineEditor
+                          fieldId="labelHorario"
+                          initialValue={
+                            content.labelHorario || "Horário de Funcionamento"
+                          }
+                          onSave={(value) =>
+                            handleSaveContent("labelHorario", value)
+                          }
+                          className="font-medium text-gray-800 text-sm"
+                        >
+                          {content.labelHorario || "Horário de Funcionamento"}
+                        </InlineEditor>
+                        <br />
+                        <InlineEditor
+                          fieldId="horarioFuncionamento"
+                          initialValue={
+                            content.horarioFuncionamento ||
+                            "Segunda a Sexta: 8h às 18h"
+                          }
+                          onSave={(value) =>
+                            handleSaveContent("horarioFuncionamento", value)
+                          }
+                          className="text-gray-600 text-sm"
+                        >
+                          {content.horarioFuncionamento ||
+                            "Segunda a Sexta: 8h às 18h"}
+                        </InlineEditor>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Directions Button */}
+                  <button
+                    onClick={handleDirections}
+                    className="w-full bg-gradient-to-r from-blue-400 to-blue-600 text-white font-bold py-3 px-4 rounded-xl text-base flex items-center justify-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                  >
+                    <Navigation className="w-5 h-5" />
+                    Como Chegar
+                  </button>
                 </div>
               </div>
 
@@ -298,7 +370,7 @@ const Contact = () => {
               </div>
 
               {/* Contact Methods */}
-              <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg p-6 text-center border border-white/20 hover:shadow-xl transition-all duration-300">
                   <div className="w-16 h-16 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                     <MessageCircle className="w-8 h-8 text-white" />
@@ -313,6 +385,7 @@ const Contact = () => {
                   >
                     {content.tituloWhatsapp || "WhatsApp"}
                   </InlineEditor>
+                  <br />
 
                   <InlineEditor
                     fieldId="descricaoWhatsapp"
@@ -325,6 +398,47 @@ const Contact = () => {
                     className="text-gray-600 text-sm"
                   >
                     {content.descricaoWhatsapp || "Agendamento rápido e fácil"}
+                  </InlineEditor>
+                </div>
+
+                <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg p-6 text-center border border-white/20 hover:shadow-xl transition-all duration-300">
+                  <div className="w-16 h-16 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg
+                      className="w-8 h-8 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                      />
+                    </svg>
+                  </div>
+                  <InlineEditor
+                    fieldId="tituloEmail"
+                    initialValue={content.tituloEmail || "Email"}
+                    onSave={(value) => handleSaveContent("tituloEmail", value)}
+                    className="font-bold text-gray-800 mb-2"
+                  >
+                    {content.tituloEmail || "Email"}
+                  </InlineEditor>
+                  <br />
+
+                  <InlineEditor
+                    fieldId="descricaoEmail"
+                    initialValue={
+                      content.descricaoEmail || "dramarialicerecepcao@gmail.com"
+                    }
+                    onSave={(value) =>
+                      handleSaveContent("descricaoEmail", value)
+                    }
+                    className="text-gray-600 text-sm"
+                  >
+                    {content.descricaoEmail || "dramarialicerecepcao@gmail.com"}
                   </InlineEditor>
                 </div>
 
@@ -342,7 +456,7 @@ const Contact = () => {
                   >
                     {content.tituloTelefone || "Telefone"}
                   </InlineEditor>
-
+                  <br />
                   <InlineEditor
                     fieldId="descricaoTelefone"
                     initialValue={
@@ -371,7 +485,7 @@ const Contact = () => {
                   >
                     {content.tituloPresencial || "Presencial"}
                   </InlineEditor>
-
+                  <br />
                   <InlineEditor
                     fieldId="descricaoPresencial"
                     initialValue={
