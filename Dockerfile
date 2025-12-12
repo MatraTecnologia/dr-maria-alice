@@ -34,6 +34,9 @@ ENV NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL=$NEXT_PUBLIC_CLERK_SIGN_UP_F
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Generate Prisma client (output is in lib/generated/prisma, not in node_modules)
+RUN npx prisma generate
+
 RUN npm run build
 
 # Production image, copy all the files and run next
