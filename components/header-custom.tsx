@@ -1,74 +1,75 @@
-"use client";
-import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
+'use client'
+
+import { Button } from '@/components/ui/button'
 import {
   Drawer,
-  DrawerTrigger,
   DrawerContent,
   DrawerTitle,
-} from "@/components/ui/drawer";
-import { Menu, ChevronDown, Calendar, Phone } from "lucide-react";
-import { useRouter, usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
-import { useUser, UserButton, SignOutButton } from "@clerk/nextjs";
+  DrawerTrigger,
+} from '@/components/ui/drawer'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { SignOutButton, UserButton, useUser } from '@clerk/nextjs'
+import { Calendar, ChevronDown, Menu, Phone } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 const tratamentosItems = [
-  { href: "/emagrecimento", label: "Emagrecimento" },
-  { href: "/partica-ortomolecular", label: "Prática Ortomolecular" },
-  { href: "/envelhecimento-saudavel", label: "Envelhecimento Saudável" },
-  { href: "/modulacao-hormonal", label: "Modulação Hormonal" },
-  { href: "/disturbios-do-sono", label: "Distúrbios do Sono" },
-  { href: "/estresse-fisico-emocional", label: "Estresse Físico e Emocional" },
-];
+  { href: '/emagrecimento', label: 'Emagrecimento' },
+  { href: '/partica-ortomolecular', label: 'Prática Ortomolecular' },
+  { href: '/envelhecimento-saudavel', label: 'Envelhecimento Saudável' },
+  { href: '/modulacao-hormonal', label: 'Modulação Hormonal' },
+  { href: '/disturbios-do-sono', label: 'Distúrbios do Sono' },
+  { href: '/estresse-fisico-emocional', label: 'Estresse Físico e Emocional' },
+]
 
 const examesItems = [
-  { href: "/dosagem-de-iodo", label: "Dosagem de Iodo" },
-  { href: "/perfil-nutrigenetico", label: "Perfil Nutrigenético" },
-  { href: "/microbioma-intestinal", label: "Microbioma Intestinal" },
-  { href: "/trombofilia", label: "Trombofilia" },
-  { href: "/histamina", label: "Histamina – Estudo da Metilação" },
-  { href: "/alzheimer", label: "Alzheimer" },
-  { href: "/hormonal-salivar", label: "Hormonal Salivar" },
-  { href: "/gene-mais", label: "Gene +" },
-  { href: "/gene-x", label: "Gene X" },
-  { href: "/copromax", label: "Copromax" },
-];
+  { href: '/dosagem-de-iodo', label: 'Dosagem de Iodo' },
+  { href: '/perfil-nutrigenetico', label: 'Perfil Nutrigenético' },
+  { href: '/microbioma-intestinal', label: 'Microbioma Intestinal' },
+  { href: '/trombofilia', label: 'Trombofilia' },
+  { href: '/histamina', label: 'Histamina – Estudo da Metilação' },
+  { href: '/alzheimer', label: 'Alzheimer' },
+  { href: '/hormonal-salivar', label: 'Hormonal Salivar' },
+  { href: '/gene-mais', label: 'Gene +' },
+  { href: '/gene-x', label: 'Gene X' },
+  { href: '/copromax', label: 'Copromax' },
+]
 
 export const HeaderCustom = () => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const [openTratamentos, setOpenTratamentos] = useState(false);
-  const [openExames, setOpenExames] = useState(false);
+  const router = useRouter()
+  const pathname = usePathname()
+  const [openTratamentos, setOpenTratamentos] = useState(false)
+  const [openExames, setOpenExames] = useState(false)
   const [configuracoes, setConfiguracoes] = useState({
-    telefone: "+5521999999999",
-    link_agendamento: "/contato",
-  });
-  const { isSignedIn } = useUser();
-  const isActive = (href: string) => pathname === href;
+    telefone: '+5521999999999',
+    link_agendamento: '/contato',
+  })
+  const { isSignedIn } = useUser()
+  const isActive = (href: string) => pathname === href
   const isInSection = (items: { href: string }[]) =>
-    items.some((item) => pathname === item.href);
+    items.some(item => pathname === item.href)
 
   useEffect(() => {
     const carregarConfiguracoes = async () => {
       try {
-        const response = await fetch("/api/configuracoes");
+        const response = await fetch('/api/configuracoes')
         if (response.ok) {
-          const data = await response.json();
-          setConfiguracoes(data);
+          const data = await response.json()
+          setConfiguracoes(data)
         }
       } catch (error) {
-        console.error("Erro ao carregar configurações:", error);
+        console.error('Erro ao carregar configurações:', error)
       }
-    };
+    }
 
-    carregarConfiguracoes();
-  }, []);
+    carregarConfiguracoes()
+  }, [])
 
   return (
     <header className="w-full border-blue-100/50 bg-transparent">
@@ -82,7 +83,8 @@ export const HeaderCustom = () => {
                 alt="Dra. Maria Alice - Medicina Integrativa"
                 width={160}
                 height={40}
-                className="transition-transform duration-300 group-hover:scale-105"
+                draggable={false}
+                className="transition-transform duration-300 group-hover:scale-105 w-40 h-10"
                 priority
               />
             </div>
@@ -93,9 +95,9 @@ export const HeaderCustom = () => {
             <Link
               href="/"
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
-                isActive("/")
-                  ? "text-blue-700 bg-blue-50 shadow-sm"
-                  : "text-gray-700 hover:text-blue-700"
+                isActive('/')
+                  ? 'text-blue-700 bg-blue-50 shadow-sm'
+                  : 'text-gray-700 hover:text-blue-700'
               }`}
             >
               INÍCIO
@@ -106,9 +108,9 @@ export const HeaderCustom = () => {
                 <Link
                   href="/dashboard"
                   className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
-                    isActive("/dashboard")
-                      ? "text-blue-700 bg-blue-50 shadow-sm"
-                      : "text-gray-700 hover:text-blue-700"
+                    isActive('/dashboard')
+                      ? 'text-blue-700 bg-blue-50 shadow-sm'
+                      : 'text-gray-700 hover:text-blue-700'
                   }`}
                 >
                   DASHBOARD
@@ -116,9 +118,9 @@ export const HeaderCustom = () => {
                 <Link
                   href="/configuracoes"
                   className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
-                    isActive("/configuracoes")
-                      ? "text-blue-700 bg-blue-50 shadow-sm"
-                      : "text-gray-700 hover:text-blue-700"
+                    isActive('/configuracoes')
+                      ? 'text-blue-700 bg-blue-50 shadow-sm'
+                      : 'text-gray-700 hover:text-blue-700'
                   }`}
                 >
                   CONFIGURAÇÕES
@@ -129,9 +131,9 @@ export const HeaderCustom = () => {
             <Link
               href="/bio"
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
-                isActive("/bio")
-                  ? "text-blue-700 bg-blue-50 shadow-sm"
-                  : "text-gray-700 hover:text-blue-700"
+                isActive('/bio')
+                  ? 'text-blue-700 bg-blue-50 shadow-sm'
+                  : 'text-gray-700 hover:text-blue-700'
               }`}
             >
               BIOGRAFIA
@@ -149,15 +151,15 @@ export const HeaderCustom = () => {
                     variant="ghost"
                     className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
                       isInSection(tratamentosItems)
-                        ? "text-blue-700 bg-blue-50 shadow-sm"
-                        : "text-gray-700"
+                        ? 'text-blue-700 bg-blue-50 shadow-sm'
+                        : 'text-gray-700'
                     }`}
-                    onClick={() => router.push("/tratamentos")}
+                    onClick={() => router.push('/tratamentos')}
                   >
                     TRATAMENTOS
                     <ChevronDown
                       className={`ml-1 h-4 w-4 transition-transform duration-300 ${
-                        openTratamentos ? "rotate-180" : ""
+                        openTratamentos ? 'rotate-180' : ''
                       }`}
                     />
                   </Button>
@@ -168,18 +170,18 @@ export const HeaderCustom = () => {
                   sideOffset={8}
                 >
                   <div className="space-y-1">
-                    {tratamentosItems.map((item) => (
+                    {tratamentosItems.map(item => (
                       <Button
                         key={item.href}
                         variant="ghost"
                         className={`w-full justify-start text-left h-auto p-3 rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 hover:translate-x-1 ${
                           isActive(item.href)
-                            ? "text-blue-700 bg-blue-50 shadow-sm"
-                            : "text-gray-700"
+                            ? 'text-blue-700 bg-blue-50 shadow-sm'
+                            : 'text-gray-700'
                         }`}
                         onClick={() => {
-                          router.push(item.href);
-                          setOpenTratamentos(false);
+                          router.push(item.href)
+                          setOpenTratamentos(false)
                         }}
                       >
                         <div className="text-sm font-medium">{item.label}</div>
@@ -202,14 +204,14 @@ export const HeaderCustom = () => {
                     variant="ghost"
                     className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
                       isInSection(examesItems)
-                        ? "text-blue-700 bg-blue-50 shadow-sm"
-                        : "text-gray-700"
+                        ? 'text-blue-700 bg-blue-50 shadow-sm'
+                        : 'text-gray-700'
                     }`}
                   >
                     EXAMES ESPECIAIS
                     <ChevronDown
                       className={`ml-1 h-4 w-4 transition-transform duration-300 ${
-                        openExames ? "rotate-180" : ""
+                        openExames ? 'rotate-180' : ''
                       }`}
                     />
                   </Button>
@@ -220,18 +222,18 @@ export const HeaderCustom = () => {
                   sideOffset={8}
                 >
                   <div className="space-y-1">
-                    {examesItems.map((item) => (
+                    {examesItems.map(item => (
                       <Button
                         key={item.href}
                         variant="ghost"
                         className={`w-full justify-start text-left h-auto p-3 rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 hover:translate-x-1 ${
                           isActive(item.href)
-                            ? "text-blue-700 bg-blue-50 shadow-sm"
-                            : "text-gray-700"
+                            ? 'text-blue-700 bg-blue-50 shadow-sm'
+                            : 'text-gray-700'
                         }`}
                         onClick={() => {
-                          router.push(item.href);
-                          setOpenExames(false);
+                          router.push(item.href)
+                          setOpenExames(false)
                         }}
                       >
                         <div className="text-sm font-medium">{item.label}</div>
@@ -245,9 +247,9 @@ export const HeaderCustom = () => {
             <Link
               href="/contato"
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-blue-50 hover:text-blue-700 ${
-                isActive("/contato")
-                  ? "text-blue-700 bg-blue-50 shadow-sm"
-                  : "text-gray-700 hover:text-blue-700"
+                isActive('/contato')
+                  ? 'text-blue-700 bg-blue-50 shadow-sm'
+                  : 'text-gray-700 hover:text-blue-700'
               }`}
             >
               CONTATO
@@ -312,6 +314,9 @@ export const HeaderCustom = () => {
                         alt="logo"
                         width={140}
                         height={35}
+                        priority
+                        draggable={false}
+                        className="w-35 h-8.75"
                       />
                     </div>
 
@@ -320,9 +325,9 @@ export const HeaderCustom = () => {
                       <Link
                         href="/"
                         className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300 ${
-                          isActive("/")
-                            ? "text-blue-700 bg-blue-50"
-                            : "text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                          isActive('/')
+                            ? 'text-blue-700 bg-blue-50'
+                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-700'
                         }`}
                       >
                         INÍCIO
@@ -331,9 +336,9 @@ export const HeaderCustom = () => {
                       <Link
                         href="/bio"
                         className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300 ${
-                          isActive("/bio")
-                            ? "text-blue-700 bg-blue-50"
-                            : "text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                          isActive('/bio')
+                            ? 'text-blue-700 bg-blue-50'
+                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-700'
                         }`}
                       >
                         BIOGRAFIA
@@ -345,14 +350,14 @@ export const HeaderCustom = () => {
                           TRATAMENTOS
                         </div>
                         <div className="pl-4 space-y-1">
-                          {tratamentosItems.map((item) => (
+                          {tratamentosItems.map(item => (
                             <Button
                               key={item.href}
                               variant="ghost"
                               className={`w-full justify-start text-left h-auto p-3 rounded-lg transition-all duration-300 ${
                                 isActive(item.href)
-                                  ? "text-blue-700 bg-blue-50"
-                                  : "text-gray-600 hover:bg-blue-50 hover:text-blue-700"
+                                  ? 'text-blue-700 bg-blue-50'
+                                  : 'text-gray-600 hover:bg-blue-50 hover:text-blue-700'
                               }`}
                               onClick={() => router.push(item.href)}
                             >
@@ -368,14 +373,14 @@ export const HeaderCustom = () => {
                           EXAMES ESPECIAIS
                         </div>
                         <div className="pl-4 space-y-1">
-                          {examesItems.map((item) => (
+                          {examesItems.map(item => (
                             <Button
                               key={item.href}
                               variant="ghost"
                               className={`w-full justify-start text-left h-auto p-3 rounded-lg transition-all duration-300 ${
                                 isActive(item.href)
-                                  ? "text-blue-700 bg-blue-50"
-                                  : "text-gray-600 hover:bg-blue-50 hover:text-blue-700"
+                                  ? 'text-blue-700 bg-blue-50'
+                                  : 'text-gray-600 hover:bg-blue-50 hover:text-blue-700'
                               }`}
                               onClick={() => router.push(item.href)}
                             >
@@ -388,9 +393,9 @@ export const HeaderCustom = () => {
                       <Link
                         href="/contato"
                         className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300 ${
-                          isActive("/contato")
-                            ? "text-blue-700 bg-blue-50"
-                            : "text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                          isActive('/contato')
+                            ? 'text-blue-700 bg-blue-50'
+                            : 'text-gray-700 hover:bg-blue-50 hover:text-blue-700'
                         }`}
                       >
                         CONTATO
@@ -399,9 +404,9 @@ export const HeaderCustom = () => {
                         <Link
                           href="/configuracoes"
                           className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300 ${
-                            isActive("/configuracoes")
-                              ? "text-blue-700 bg-blue-50"
-                              : "text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                            isActive('/configuracoes')
+                              ? 'text-blue-700 bg-blue-50'
+                              : 'text-gray-700 hover:bg-blue-50 hover:text-blue-700'
                           }`}
                         >
                           CONFIGURAÇÕES
@@ -441,5 +446,5 @@ export const HeaderCustom = () => {
         </div>
       </div>
     </header>
-  );
-};
+  )
+}

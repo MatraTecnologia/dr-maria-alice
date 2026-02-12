@@ -1,5 +1,5 @@
-import { BlocoDeConteudo } from './pageEditor'
 import { Button } from '@/components/ui/button'
+import { BlocoDeConteudo } from './pageEditor'
 
 type Props = {
   bloco: BlocoDeConteudo
@@ -7,23 +7,31 @@ type Props = {
 }
 
 export default function BlockRenderer({ bloco, onChange }: Props) {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     onChange(bloco.id, { [e.target.name]: e.target.value })
   }
 
   const getAlignmentClass = () => {
     switch (bloco.props.alinhamento) {
-      case 'centro': return 'text-center'
-      case 'direita': return 'text-right'
-      default: return 'text-left'
+      case 'centro':
+        return 'text-center'
+      case 'direita':
+        return 'text-right'
+      default:
+        return 'text-left'
     }
   }
 
   const getTamanhoClass = () => {
     switch (bloco.props.tamanho) {
-      case 'pequeno': return 'text-sm'
-      case 'grande': return 'text-2xl'
-      default: return 'text-base'
+      case 'pequeno':
+        return 'text-sm'
+      case 'grande':
+        return 'text-2xl'
+      default:
+        return 'text-base'
     }
   }
 
@@ -39,7 +47,7 @@ export default function BlockRenderer({ bloco, onChange }: Props) {
           className={`w-full p-2 text-3xl font-bold border-0 focus:outline-none focus:ring-0 ${getAlignmentClass()}`}
         />
       )
-    
+
     case 'subtitulo':
       return (
         <input
@@ -51,7 +59,7 @@ export default function BlockRenderer({ bloco, onChange }: Props) {
           className={`w-full p-2 text-xl font-semibold border-0 focus:outline-none focus:ring-0 ${getAlignmentClass()}`}
         />
       )
-    
+
     case 'paragrafo':
       return (
         <textarea
@@ -62,16 +70,23 @@ export default function BlockRenderer({ bloco, onChange }: Props) {
           className={`w-full p-2 border-0 focus:outline-none focus:ring-0 resize-none ${getAlignmentClass()} ${getTamanhoClass()}`}
           rows={bloco.props.linhasTexto || 4}
           style={{
-            width: bloco.props.larguraPersonalizada ? `${bloco.props.larguraPersonalizada}%` : '100%'
+            width: bloco.props.larguraPersonalizada
+              ? `${bloco.props.larguraPersonalizada}%`
+              : '100%',
           }}
         />
       )
-    
+
     case 'imagem':
       return (
-        <div className="space-y-2" style={{
-          width: bloco.props.larguraPersonalizada ? `${bloco.props.larguraPersonalizada}%` : '100%'
-        }}>
+        <div
+          className="space-y-2"
+          style={{
+            width: bloco.props.larguraPersonalizada
+              ? `${bloco.props.larguraPersonalizada}%`
+              : '100%',
+          }}
+        >
           <input
             type="text"
             name="url"
@@ -90,26 +105,34 @@ export default function BlockRenderer({ bloco, onChange }: Props) {
           />
           {bloco.props.url && (
             <div className={`${getAlignmentClass()}`}>
-              <img 
-                src={bloco.props.url} 
+              <img
+                draggable={false}
+                src={bloco.props.url}
                 alt={bloco.props.alt || ''}
                 className="max-w-full h-auto rounded"
-                style={{ 
-                  maxHeight: bloco.props.altura ? `${bloco.props.altura}px` : 'auto',
+                style={{
+                  maxHeight: bloco.props.altura
+                    ? `${bloco.props.altura}px`
+                    : 'auto',
                   width: '100%',
-                  objectFit: 'cover'
+                  objectFit: 'cover',
                 }}
               />
             </div>
           )}
         </div>
       )
-    
+
     case 'botao':
       return (
-        <div className={`${getAlignmentClass()}`} style={{
-          width: bloco.props.larguraPersonalizada ? `${bloco.props.larguraPersonalizada}%` : '100%'
-        }}>
+        <div
+          className={`${getAlignmentClass()}`}
+          style={{
+            width: bloco.props.larguraPersonalizada
+              ? `${bloco.props.larguraPersonalizada}%`
+              : '100%',
+          }}
+        >
           <div className="inline-block space-y-2">
             <input
               type="text"
@@ -130,7 +153,11 @@ export default function BlockRenderer({ bloco, onChange }: Props) {
             <select
               name="estilo"
               value={bloco.props.estilo || 'primario'}
-              onChange={(e) => onChange(bloco.id, { estilo: e.target.value as BlocoDeConteudo['props']['estilo'] })}
+              onChange={e =>
+                onChange(bloco.id, {
+                  estilo: e.target.value as BlocoDeConteudo['props']['estilo'],
+                })
+              }
               className="w-full p-2 border border-gray-300 rounded focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             >
               <option value="primario">Primário</option>
@@ -139,8 +166,13 @@ export default function BlockRenderer({ bloco, onChange }: Props) {
             </select>
             {bloco.props.texto && (
               <Button
-                variant={bloco.props.estilo === 'outline' ? 'outline' : 
-                         bloco.props.estilo === 'secundario' ? 'secondary' : 'default'}
+                variant={
+                  bloco.props.estilo === 'outline'
+                    ? 'outline'
+                    : bloco.props.estilo === 'secundario'
+                      ? 'secondary'
+                      : 'default'
+                }
                 className="mt-2"
               >
                 {bloco.props.texto}
@@ -149,17 +181,24 @@ export default function BlockRenderer({ bloco, onChange }: Props) {
           </div>
         </div>
       )
-    
+
     case 'separador':
       return (
         <div className={`${getAlignmentClass()}`}>
-          <hr className="border-gray-300 my-4" style={{ 
-            width: bloco.props.largura === 'meia' ? '50%' : 
-                   bloco.props.largura === 'terco' ? '33.333%' : '100%' 
-          }} />
+          <hr
+            className="border-gray-300 my-4"
+            style={{
+              width:
+                bloco.props.largura === 'meia'
+                  ? '50%'
+                  : bloco.props.largura === 'terco'
+                    ? '33.333%'
+                    : '100%',
+            }}
+          />
         </div>
       )
-    
+
     default:
       return null
   }

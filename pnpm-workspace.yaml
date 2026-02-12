@@ -1,0 +1,30 @@
+onlyBuiltDependencies:
+  - ' '
+  - '"'
+  - ','
+  - '-'
+  - /
+  - '@'
+  - '@clerk/shared'
+  - '@prisma/client'
+  - '@prisma/engines'
+  - '['
+  - ']'
+  - a
+  - c
+  - d
+  - e
+  - h
+  - k
+  - l
+  - n
+  - o
+  - p
+  - prisma
+  - r
+  - s
+  - sharp
+  - u
+  - unrs-resolver
+  - v
+  - w

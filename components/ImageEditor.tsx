@@ -1,9 +1,11 @@
-"use client"
-import { useState, useRef, useEffect } from "react"
-import { useAuth } from "@clerk/nextjs"
-import { Edit3, Upload, X, Save } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
+'use client'
+
+import { useAuth } from '@clerk/nextjs'
+import { Edit3, Save, Upload, X } from 'lucide-react'
+import Image from 'next/image'
+import { useEffect, useRef, useState } from 'react'
+
+import { Button } from '@/components/ui/button'
 
 interface ImageEditorProps {
   fieldId: string
@@ -15,14 +17,14 @@ interface ImageEditorProps {
   height?: number
 }
 
-export default function ImageEditor({ 
-  fieldId, 
-  initialValue = "", 
-  onSave, 
-  className = "",
-  alt = "Imagem",
+export default function ImageEditor({
+  fieldId,
+  initialValue = '',
+  onSave,
+  className = '',
+  alt = 'Imagem',
   width = 300,
-  height = 200
+  height = 200,
 }: ImageEditorProps) {
   const { isSignedIn } = useAuth()
   const [isEditing, setIsEditing] = useState(false)
@@ -57,7 +59,7 @@ export default function ImageEditor({
     }
 
     const reader = new FileReader()
-    reader.onload = (e) => {
+    reader.onload = e => {
       const base64 = e.target?.result as string
       setImageData(base64)
       setIsEditing(true) // Entrar no modo de edição quando uma imagem é selecionada
@@ -98,12 +100,19 @@ export default function ImageEditor({
   if (!isSignedIn) {
     return (
       <div className={className}>
-        {imageData && typeof imageData === 'string' && imageData.trim() !== "" && (imageData.startsWith('data:image/') || imageData.startsWith('http') || imageData.startsWith('/')) ? (
+        {imageData &&
+        typeof imageData === 'string' &&
+        imageData.trim() !== '' &&
+        (imageData.startsWith('data:image/') ||
+          imageData.startsWith('http') ||
+          imageData.startsWith('/')) ? (
           <Image
             src={imageData}
             alt={alt}
             width={width}
             height={height}
+            priority
+            draggable={false}
             className="w-full h-full object-cover"
             style={{ objectFit: 'cover' }}
           />
@@ -120,18 +129,25 @@ export default function ImageEditor({
   if (!isEditing) {
     return (
       <div className={`relative group ${className}`}>
-        {imageData && typeof imageData === 'string' && imageData.trim() !== "" && (imageData.startsWith('data:image/') || imageData.startsWith('http') || imageData.startsWith('/')) ? (
+        {imageData &&
+        typeof imageData === 'string' &&
+        imageData.trim() !== '' &&
+        (imageData.startsWith('data:image/') ||
+          imageData.startsWith('http') ||
+          imageData.startsWith('/')) ? (
           <Image
             src={imageData}
             alt={alt}
             width={width}
             height={height}
+            priority
+            draggable={false}
             className="w-full h-full object-cover cursor-pointer"
             style={{ objectFit: 'cover' }}
             onClick={handleImageClick}
           />
         ) : (
-          <div 
+          <div
             className="w-full h-32 bg-gray-200 flex items-center justify-center text-gray-500 cursor-pointer border-2 border-dashed border-gray-300 hover:border-blue-400 transition-colors"
             onClick={handleImageClick}
           >
@@ -141,7 +157,7 @@ export default function ImageEditor({
             </div>
           </div>
         )}
-        
+
         {/* Botão de edição que aparece no hover */}
         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100">
           <Button
@@ -167,23 +183,30 @@ export default function ImageEditor({
     )
   }
 
-     // Se estiver editando
-   return (
-     <div className={`${className} relative z-40`}>
-       <div className="space-y-4">
-                 {/* Preview da imagem */}
-         {imageData && typeof imageData === 'string' && imageData.trim() !== "" && (imageData.startsWith('data:image/') || imageData.startsWith('http') || imageData.startsWith('/')) && (
-           <div className="relative">
-             <Image
-               src={imageData}
-               alt={alt}
-               width={width}
-               height={height}
-               className="w-full h-full object-cover rounded-lg"
-               style={{ objectFit: 'cover' }}
-             />
-           </div>
-         )}
+  // Se estiver editando
+  return (
+    <div className={`${className} relative z-40`}>
+      <div className="space-y-4">
+        {/* Preview da imagem */}
+        {imageData &&
+          typeof imageData === 'string' &&
+          imageData.trim() !== '' &&
+          (imageData.startsWith('data:image/') ||
+            imageData.startsWith('http') ||
+            imageData.startsWith('/')) && (
+            <div className="relative">
+              <Image
+                src={imageData}
+                alt={alt}
+                width={width}
+                priority
+                height={height}
+                draggable={false}
+                className="w-full h-full object-cover rounded-lg"
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
+          )}
 
         {/* Upload de nova imagem */}
         <div className="space-y-2">
@@ -202,37 +225,37 @@ export default function ImageEditor({
           </p>
         </div>
 
-                 {/* Botões de ação */}
-         <div className="flex gap-2 bg-white p-3 rounded-lg shadow-lg border border-gray-200 relative z-50">
-                       <Button
-              size="sm"
-              onClick={handleSave}
-              disabled={isSaving || !imageData || imageData.trim() === ""}
-              className="bg-blue-600 hover:bg-blue-700"
-            >
-             {isSaving ? (
-               <>
-                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                 Salvando...
-               </>
-             ) : (
-               <>
-                 <Save className="w-4 h-4 mr-1" />
-                 Salvar
-               </>
-             )}
-           </Button>
-           <Button
-             size="sm"
-             variant="outline"
-             onClick={handleCancel}
-             disabled={isSaving}
-           >
-             <X className="w-4 h-4 mr-1" />
-             Cancelar
-           </Button>
-         </div>
+        {/* Botões de ação */}
+        <div className="flex gap-2 bg-white p-3 rounded-lg shadow-lg border border-gray-200 relative z-50">
+          <Button
+            size="sm"
+            onClick={handleSave}
+            disabled={isSaving || !imageData || imageData.trim() === ''}
+            className="bg-blue-600 hover:bg-blue-700"
+          >
+            {isSaving ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                Salvando...
+              </>
+            ) : (
+              <>
+                <Save className="w-4 h-4 mr-1" />
+                Salvar
+              </>
+            )}
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleCancel}
+            disabled={isSaving}
+          >
+            <X className="w-4 h-4 mr-1" />
+            Cancelar
+          </Button>
+        </div>
       </div>
     </div>
   )
-} 
+}
