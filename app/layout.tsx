@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from '@clerk/nextjs'
+import GoogleAdsTag from "@/components/GoogleAdsTag";
 import "./globals.css";
 
 const inter = Inter({
@@ -22,6 +23,7 @@ const RootLayout = ({
     <ClerkProvider>
       <html lang="pt-BR">
         <body className={`${inter.variable} antialiased`}>
+          <GoogleAdsTag />
           {children}
         </body>
       </html>
