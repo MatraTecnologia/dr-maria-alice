@@ -13,8 +13,9 @@ interface Configuracoes {
   endereco_mapa: string;
 }
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface ContactClientProps {
-  initialContent: any;
+  initialContent: Record<string, any>;
 }
 
 export default function ContactClient({ initialContent }: ContactClientProps) {

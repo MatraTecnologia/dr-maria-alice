@@ -6,13 +6,33 @@ import EditablePage from "@/components/EditablePage";
 import InlineEditor from "@/components/InlineEditor";
 import ImageEditor from "@/components/ImageEditor";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface HomeClientProps {
-  initialContent: any;
+  initialContent: Record<string, any>;
 }
 
 export default function HomeClient({ initialContent }: HomeClientProps) {
   const router = useRouter();
+  const [whatsappLink, setWhatsappLink] = useState("https://wa.me/5511993049032?text=Olá! Gostaria de agendar um atendimento.");
+
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const response = await fetch("/api/configuracoes");
+        if (response.ok) {
+          const data = await response.json();
+          if (data.link_whatsapp) {
+            setWhatsappLink(data.link_whatsapp);
+          }
+        }
+      } catch (error) {
+        console.error("Erro ao carregar configurações:", error);
+      }
+    };
+    fetchConfig();
+  }, []);
   return (
     <EditablePage slug="home" initialContent={initialContent}>
       {(content, handleSaveContent) => (
@@ -102,9 +122,11 @@ export default function HomeClient({ initialContent }: HomeClientProps) {
                     </InlineEditor>
                   </div>
                   <div className="flex flex-col sm:flex-row mt-8 gap-4 w-full ">
-                    <Button className="bg-blue-600 hover:bg-blue-700 p-4 sm:p-6 font-light w-full sm:w-auto">
-                      {content.botaoAgendar || "Agendar uma consulta"}
-                    </Button>
+                    <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+                      <Button className="bg-blue-600 hover:bg-blue-700 p-4 sm:p-6 font-light w-full">
+                        {content.botaoAgendar || "Agendar uma consulta"}
+                      </Button>
+                    </a>
                     <Button
                       onClick={() => router.push("/bio")}
                       className="bg-transparent border-blue-600 border text-blue-600 hover:bg-blue-700 hover:text-white p-4 sm:p-6 font-light w-full sm:w-auto"
@@ -382,7 +404,7 @@ export default function HomeClient({ initialContent }: HomeClientProps) {
                   "Agende sua consulta e tenha acesso a um atendimento de qualidade, personalizado e dedicado ao seu bem estar. Não perca tempo, reserve seu horário agora mesmo e invista na sua qualidade de vida!"}
               </InlineEditor>
               <a
-                href="https://wa.me/SEU_NUMERO_WHATSAPP"
+                href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center bg-[#1877F2] hover:bg-[#145db2] text-white font-semibold text-xs md:text-sm px-6 sm:px-8 py-3 rounded-lg transition-colors duration-200 w-full max-w-xs sm:max-w-fit"

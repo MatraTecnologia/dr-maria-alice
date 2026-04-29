@@ -1,8 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface PageContent {
-  [key: string]: string;
+  [key: string]: any;
 }
 
 interface Pagina {

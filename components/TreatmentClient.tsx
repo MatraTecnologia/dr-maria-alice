@@ -5,9 +5,10 @@ import EditablePage from "@/components/EditablePage";
 import InlineEditor from "@/components/InlineEditor";
 import ImageEditor from "@/components/ImageEditor";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface TreatmentClientProps {
   slug: string;
-  initialContent: any;
+  initialContent: Record<string, any>;
   defaultTitle: string;
   defaultImage: string;
   imageFieldId: string;

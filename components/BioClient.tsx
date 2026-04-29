@@ -7,8 +7,9 @@ import InlineEditor from "@/components/InlineEditor";
 import ImageEditor from "@/components/ImageEditor";
 import EditablePage from "@/components/EditablePage";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface BioClientProps {
-  initialContent: any;
+  initialContent: Record<string, any>;
 }
 
 export default function BioClient({ initialContent }: BioClientProps) {

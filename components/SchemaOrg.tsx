@@ -1,8 +1,9 @@
 import React from 'react';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface SchemaOrgProps {
   type?: 'Physician' | 'MedicalClinic' | 'LocalBusiness';
-  data?: any;
+  data?: Record<string, any>;
 }
 
 const SchemaOrg: React.FC<SchemaOrgProps> = ({ type = 'Physician', data }) => {

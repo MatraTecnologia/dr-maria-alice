@@ -45,8 +45,9 @@ const tratamentos = [
   }
 ];
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface TratamentosClientProps {
-  initialContent: any;
+  initialContent: Record<string, any>;
 }
 
 export default function TratamentosClient({ initialContent }: TratamentosClientProps) {

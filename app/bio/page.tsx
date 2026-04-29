@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/lib/prisma";
 import BioClient from "@/components/BioClient";
 import { Metadata } from "next";
