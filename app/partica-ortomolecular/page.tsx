@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Restabelecimento do equilíbrio orgânico através de substâncias naturais na Clínica Dra. Maria Alice.",
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function OrtomolecularPage() {
   const slug = "partica-ortomolecular";
   const page = await prisma.pagina.findUnique({

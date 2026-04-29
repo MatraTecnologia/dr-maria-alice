@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Conheça os tratamentos oferecidos pela Dra. Maria Alice: Emagrecimento, Modulação Hormonal, Prática Ortomolecular e mais.",
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function TratamentosPage() {
   const page = await prisma.pagina.findUnique({
     where: { slug: "tratamentos" },

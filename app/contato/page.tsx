@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Entre em contato com a Dra. Maria Alice em Santana, SP. Telefone, WhatsApp, e-mail e localização da clínica.",
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function ContactPage() {
   const page = await prisma.pagina.findUnique({
     where: { slug: "contato" },

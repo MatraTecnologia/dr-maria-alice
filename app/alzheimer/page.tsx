@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Tratamento e suporte para Alzheimer com abordagem integrativa na Clínica Dra. Maria Alice.",
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function AlzheimerPage() {
   const slug = "alzheimer";
   const page = await prisma.pagina.findUnique({

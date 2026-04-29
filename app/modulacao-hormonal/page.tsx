@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Ajuste e equilíbrio hormonal para homens e mulheres com foco em qualidade de vida na Clínica Dra. Maria Alice.",
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function ModulacaoHormonalPage() {
   const slug = "modulacao-hormonal";
   const page = await prisma.pagina.findUnique({

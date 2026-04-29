@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Conheça a clínica da Dra. Maria Alice em Santana, SP. Focada em Medicina Integrativa e Longevidade Saudável.",
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const page = await prisma.pagina.findUnique({
     where: { slug: "home" },
