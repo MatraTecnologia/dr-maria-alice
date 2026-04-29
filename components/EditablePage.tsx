@@ -16,18 +16,21 @@ interface Pagina {
 
 interface EditablePageProps {
   slug: string;
+  initialContent?: PageContent;
   children: (
     content: PageContent,
     handleSaveContent: (fieldId: string, value: string) => Promise<void>
   ) => React.ReactNode;
 }
 
-export default function EditablePage({ slug, children }: EditablePageProps) {
-  const [content, setContent] = useState<PageContent>({});
-  const [loading, setLoading] = useState(true);
+export default function EditablePage({ slug, children, initialContent }: EditablePageProps) {
+  const [content, setContent] = useState<PageContent>(initialContent || {});
+  const [loading, setLoading] = useState(!initialContent);
 
-  // Carregar conteúdo existente do banco
+  // Carregar conteúdo existente do banco apenas se não foi passado via props
   useEffect(() => {
+    if (initialContent) return;
+    
     const loadContent = async () => {
       try {
         const response = await fetch(`/api/paginas?slug=${slug}`);
@@ -47,7 +50,7 @@ export default function EditablePage({ slug, children }: EditablePageProps) {
     };
 
     loadContent();
-  }, [slug]);
+  }, [slug, initialContent]);
 
   const handleSaveContent = async (fieldId: string, value: string) => {
     try {

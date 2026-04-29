@@ -1,68 +1,27 @@
-"use client"
-import { HeaderCustom } from "@/components/header-custom"
-import { Button } from "@/components/ui/button"
-import EditablePage from "@/components/EditablePage"
-import InlineEditor from "@/components/InlineEditor"
-import ImageEditor from "@/components/ImageEditor"
+import { prisma } from "@/lib/prisma";
+import TreatmentClient from "@/components/TreatmentClient";
+import { Metadata } from "next";
 
-export default function Alzheimer() {
+export const metadata: Metadata = {
+  title: "Alzheimer | Tratamentos",
+  description: "Tratamento e suporte para Alzheimer com abordagem integrativa na Clínica Dra. Maria Alice.",
+};
+
+export default async function AlzheimerPage() {
+  const slug = "alzheimer";
+  const page = await prisma.pagina.findUnique({
+    where: { slug },
+  });
+
+  const content = (page?.conteudo as any) || {};
+
   return (
-    <EditablePage slug="alzheimer">
-      {(content, handleSaveContent) => (
-        <div className="min-h-screen bg-[#eaf6fd]">
-          <HeaderCustom />
-          <section className="flex flex-col md:flex-row gap-8 md:gap-10 px-4 md:px-[12%] py-8 md:py-12 items-center">
-            <div className="w-full md:w-[45%] flex flex-col items-start">
-              <ImageEditor
-                fieldId="imagemAlzheimer"
-                initialValue={content.imagemAlzheimer || "/alzheimer.png"}
-                onSave={handleSaveContent}
-                className="rounded-xl object-cover w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-full h-auto"
-                alt="Alzheimer"
-                width={200}
-                height={200}
-              />
-            </div>
-            <div className="w-full md:w-[55%] flex flex-col mt-8 md:mt-0">
-              <InlineEditor
-                fieldId="titulo"
-                initialValue={content.titulo || "Alzheimer"}
-                onSave={(value) => handleSaveContent("titulo", value)}
-                type="title"
-                className="text-2xl md:text-3xl font-bold text-[#222B45] mb-4"
-              >
-                {content.titulo || "Alzheimer"}
-              </InlineEditor>
-              
-              <InlineEditor
-                fieldId="subtitulo"
-                initialValue={content.subtitulo || ""}
-                onSave={(value) => handleSaveContent("subtitulo", value)}
-                className="text-lg text-blue-600 mb-4"
-              >
-                {content.subtitulo || ""}
-              </InlineEditor>
-              
-              <InlineEditor
-                fieldId="descricao"
-                initialValue={content.descricao || ""}
-                onSave={(value) => handleSaveContent("descricao", value)}
-                type="textarea"
-                className="text-base text-[#222B45] mb-6 leading-relaxed whitespace-break-spaces"
-              >
-                {content.descricao || ""}
-              </InlineEditor>
-              
-              <Button
-                asChild
-                className="w-fit bg-blue-600 hover:bg-blue-700 text-white font-light px-6 py-3 mt-2"
-              >
-                <a href="/contato">AGENDE UMA CONSULTA</a>
-              </Button>
-            </div>
-          </section>
-        </div>
-      )}
-    </EditablePage>
-  )
+    <TreatmentClient
+      slug={slug}
+      initialContent={content}
+      defaultTitle="Alzheimer"
+      defaultImage="/alzheimer.png"
+      imageFieldId="imagemAlzheimer"
+    />
+  );
 }
